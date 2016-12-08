@@ -32,8 +32,12 @@ MainWindow::MainWindow()
 
     setWindowTitle(tr("Billiard"));
 
-	widgetPhys->addPoint(0.);
-	widgetPhys->addPoint(M_PI / 3.);
-	widgetPhys->addPoint(6. * M_PI / 5.);
+    double theta = 0, alpha = 5. * M_PI / 6. + 1e-4;
+	widgetPhys->addPoint(theta);
+    for (int i = 0 ; i < 1000 ; ++i) {
+        theta = billiard.nextPosition(theta, alpha);
+        alpha = billiard.nextDirection(alpha, theta);
+        widgetPhys->addPoint(theta);
+    }
 }
 

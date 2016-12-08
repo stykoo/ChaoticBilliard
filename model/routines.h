@@ -3,7 +3,7 @@
 
 #include <functional>
 
-double wrapAngle(const double angle);
+double wrapAngle(double angle);
 void solveSecondOrderEq(const double a, const double b, const double c,
                         double &sol1, double &sol2);
 double brentSolver(std::function<double(double)> f, double a, double b,

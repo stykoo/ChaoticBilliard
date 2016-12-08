@@ -6,8 +6,11 @@ int sign(const double x) {
     return (0. < x) - (x < 0.);
 }
 
-double wrapAngle(const double angle) {
-    return angle - 2 * M_PI * std::floor(angle / (2 * M_PI));
+double wrapAngle(double angle) {
+    angle = std::fmod(angle, 2. * M_PI); 
+    if (angle < 0)
+        angle += 2 * M_PI;
+    return angle;
 }
 
 void solveSecondOrderEq(const double a, const double b, const double c,

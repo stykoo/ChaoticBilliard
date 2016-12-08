@@ -10,7 +10,9 @@ class CircleBilliard : public AbstractBilliard {
 
         double rho(const double theta) const;
 		double rhoMax() const;
+
         double nextPosition(const double theta, const double alpha);
+        double nextDirection(const double alpha, const double theta);
 
 		CircleBilliard* clone() const { return new CircleBilliard(*this); }
 

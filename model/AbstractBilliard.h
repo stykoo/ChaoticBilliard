@@ -23,6 +23,12 @@ class AbstractBilliard {
                (void) alpha;
            return 0;
         }
+        virtual double nextDirection(const double alpha, const double theta)
+           const {
+               (void) theta;
+               (void) alpha;
+           return 0;
+        }
 };
 
 #endif

@@ -1,5 +1,6 @@
 #include <cmath>
 #include "CircleBilliard.h"
+#include "routines.h"
 
 CircleBilliard::CircleBilliard(double r) : AbstractBilliard(), r(r) {}
 
@@ -13,6 +14,9 @@ double CircleBilliard::rhoMax() const {
 }
 
 double CircleBilliard::nextPosition(const double theta, const double alpha) {
-    return theta - M_PI + 2 * alpha;  // Periodize it! 
+    return wrapAngle(-theta + 2 * alpha - M_PI);
 }
 
+double CircleBilliard::nextDirection(const double alpha, const double theta) {
+    return wrapAngle(2 * theta - alpha);
+}
