@@ -1,15 +1,18 @@
 #include "WidgetParametersSpace.h"
 
-WidgetParametersSpace::WidgetParametersSpace(QWidget *parent) : QWidget(parent) {
+WidgetParametersSpace::WidgetParametersSpace(QWidget *parent) :
+        QWidget(parent) {
     setBackgroundRole(QPalette::Base);
 
-	pixels = new QImage(PARAMSPACE_WIDTH, PARAMSPACE_HEIGHT, QImage::Format_RGB32);
+	pixels = new QImage(PARAMSPACE_WIDTH, PARAMSPACE_HEIGHT,
+                        QImage::Format_RGB32);
 	pixels->fill(Qt::white);
 
 	for(int x=0 ; x<PARAMSPACE_WIDTH ; x++){
 		for(int y=0 ; y<PARAMSPACE_HEIGHT ; y++){
 			if(qrand() % 10 == 0){
-				pixels->setPixel(x, y, qRgb((qrand()%256), (qrand()%256), (qrand()%256)));
+				pixels->setPixel(x, y, qRgb((qrand()%256), (qrand()%256),
+                                            (qrand()%256)));
 			}
 		}
 	}

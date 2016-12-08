@@ -1,12 +1,12 @@
 #include "WidgetPhysicalSpace.h"
 #include "WidgetParametersSpace.h"
 #include "MainWindow.h"
+#include "../model/Billiards.h"
 
 MainWindow::MainWindow()
 {
-	//DeformedCircle shapeFun(0.5);
-	Ellipse shapeFun(0.5);
-	widgetPhys = new WidgetPhysicalSpace(shapeFun);
+	CircleBilliard billiard(0.5);
+	widgetPhys = new WidgetPhysicalSpace(billiard);
 	widgetParams = new WidgetParametersSpace();
 
     QHBoxLayout *areasLayout = new QHBoxLayout;
@@ -33,7 +33,7 @@ MainWindow::MainWindow()
     setWindowTitle(tr("Billiard"));
 
 	widgetPhys->addPoint(0.);
-	widgetPhys->addPoint(M_PI/3.);
-	widgetPhys->addPoint(6.*M_PI/5.);
+	widgetPhys->addPoint(M_PI / 3.);
+	widgetPhys->addPoint(6. * M_PI / 5.);
 }
 

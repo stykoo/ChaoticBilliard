@@ -5,7 +5,7 @@
 #define PARAMSPACE_HEIGHT 600
 
 #include <QtWidgets>
-#include "ShapeFunctions.h"
+#include "../model/Billiards.h"
 
 class WidgetParametersSpace : public QWidget
 {
