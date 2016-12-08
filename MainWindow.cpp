@@ -1,16 +1,17 @@
-#include "SpaceArea.h"
-#include "ParamArea.h"
+#include "WidgetPhysicalSpace.h"
+#include "WidgetParametersSpace.h"
 #include "MainWindow.h"
 
 MainWindow::MainWindow()
 {
-	DeformedCircle shapeFun(0.5);
-	spaceArea = new SpaceArea(shapeFun);
-	paramArea = new ParamArea();
+	//DeformedCircle shapeFun(0.5);
+	Ellipse shapeFun(0.5);
+	widgetPhys = new WidgetPhysicalSpace(shapeFun);
+	widgetParams = new WidgetParametersSpace();
 
     QHBoxLayout *areasLayout = new QHBoxLayout;
-	areasLayout->addWidget(spaceArea);
-	areasLayout->addWidget(paramArea);
+	areasLayout->addWidget(widgetPhys);
+	areasLayout->addWidget(widgetParams);
 
     reinitButton = new QPushButton(tr("Reinit"));
     startButton = new QPushButton(tr("Start / Stop"));
@@ -31,10 +32,8 @@ MainWindow::MainWindow()
 
     setWindowTitle(tr("Billiard"));
 
-	spaceArea->addPoint(0.);
-	spaceArea->addPoint(M_PI/3.);
-	spaceArea->addPoint(6.*M_PI/5.);
+	widgetPhys->addPoint(0.);
+	widgetPhys->addPoint(M_PI/3.);
+	widgetPhys->addPoint(6.*M_PI/5.);
 }
-
-
 

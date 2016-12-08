@@ -3,8 +3,8 @@
 
 #include <QtWidgets>
 
-class SpaceArea;
-class ParamArea;
+class WidgetPhysicalSpace;
+class WidgetParametersSpace;
 
 class MainWindow : public QWidget
 {
@@ -14,8 +14,8 @@ class MainWindow : public QWidget
     private:
 		void nextTimestep();
 
-		SpaceArea *spaceArea;
-		ParamArea *paramArea;
+		WidgetPhysicalSpace *widgetPhys;
+		WidgetParametersSpace *widgetParams;
 		QPushButton *reinitButton;
 		QPushButton *startButton;
 		QPushButton *paramButton;

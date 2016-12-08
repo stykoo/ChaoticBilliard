@@ -1,6 +1,6 @@
-#include "SpaceArea.h"
+#include "WidgetPhysicalSpace.h"
 
-SpaceArea::SpaceArea(const ShapeFunction &fun, QWidget *parent) : QWidget(parent) {
+WidgetPhysicalSpace::WidgetPhysicalSpace(const ShapeFunction &fun, QWidget *parent) : QWidget(parent) {
     setBackgroundRole(QPalette::Base);
 	shapeFun = fun.clone();
 
@@ -14,22 +14,22 @@ SpaceArea::SpaceArea(const ShapeFunction &fun, QWidget *parent) : QWidget(parent
 	billiard = new QPolygonF(billPoints);
 }
 
-SpaceArea::~SpaceArea(){
+WidgetPhysicalSpace::~WidgetPhysicalSpace(){
 	delete shapeFun;
 	delete billiard;
 }
 
-QSize SpaceArea::minimumSizeHint() const
+QSize WidgetPhysicalSpace::minimumSizeHint() const
 {
 	return QSize(UNIT_SIZE*shapeFun->max(), UNIT_SIZE*shapeFun->max());
 }
 
-QSize SpaceArea::sizeHint() const
+QSize WidgetPhysicalSpace::sizeHint() const
 {
 	return QSize(UNIT_SIZE*shapeFun->max(), UNIT_SIZE*shapeFun->max());
 }
 
-void SpaceArea::setShapeFunction(const ShapeFunction &fun){
+void WidgetPhysicalSpace::setShapeFunction(const ShapeFunction &fun){
 	delete shapeFun;
 	delete billiard;
 
@@ -45,14 +45,14 @@ void SpaceArea::setShapeFunction(const ShapeFunction &fun){
 	billiard = new QPolygonF(billPoints);
 }
 
-void SpaceArea::addPoint(const double theta){
+void WidgetPhysicalSpace::addPoint(const double theta){
 	const double rad = UNIT_SIZE/2.0;
 	const double x = rad*(*shapeFun)(theta)*std::cos(theta);
 	const double y = rad*(*shapeFun)(theta)*std::sin(theta);
 	pointHistory.prepend(QPointF(x,y));
 }
 
-void SpaceArea::paintEvent(QPaintEvent *event)
+void WidgetPhysicalSpace::paintEvent(QPaintEvent *event)
 {
 	(void) event; // Unused parameter
     QPainter painter(this);
