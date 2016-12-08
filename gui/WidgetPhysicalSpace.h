@@ -2,7 +2,7 @@
 #define WIDGET_PHYSICAL_SPACE
 
 #define NB_ANGULAR_DIVISIONS 100
-#define UNIT_SIZE 300
+#define PHYSPACE_SIZE 400
 
 #include <QtWidgets>
 #include "../model/Billiards.h"

@@ -8,8 +8,8 @@ class EllipseBilliard : public AbstractBilliard {
 		EllipseBilliard(double e, double p = 1.0);
 		~EllipseBilliard(){};
 
-        double rad(const double theta) const;
-		double max() const;
+        double rho(const double theta) const;
+		double rhoMax() const;
         double nextPosition(const double theta, const double alpha);
 
 		EllipseBilliard* clone() const { return new EllipseBilliard(*this); }

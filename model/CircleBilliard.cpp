@@ -3,12 +3,12 @@
 
 CircleBilliard::CircleBilliard(double r) : AbstractBilliard(), r(r) {}
 
-double CircleBilliard::rad(const double theta) const {
+double CircleBilliard::rho(const double theta) const {
 	(void) theta;
 	return r;
 }
 
-double CircleBilliard::max() const {
+double CircleBilliard::rhoMax() const {
 	return r;
 }
 

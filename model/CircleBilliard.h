@@ -8,8 +8,8 @@ class CircleBilliard : public AbstractBilliard {
 		CircleBilliard(double r = 1.0);
 		~CircleBilliard(){};
 
-        double rad(const double theta) const;
-		double max() const;
+        double rho(const double theta) const;
+		double rhoMax() const;
         double nextPosition(const double theta, const double alpha);
 
 		CircleBilliard* clone() const { return new CircleBilliard(*this); }

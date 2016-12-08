@@ -4,11 +4,11 @@
 DeformedCircleBilliard::DeformedCircleBilliard(double eps, double r) :
     AbstractBilliard(), eps(eps), r(r) {}
 
-double DeformedCircleBilliard::rad(const double theta) const {
+double DeformedCircleBilliard::rho(const double theta) const {
 	return r + eps*std::cos(theta);
 }
 
-double DeformedCircleBilliard::max() const {
+double DeformedCircleBilliard::rhoMax() const {
 	return r + eps;
 }
 

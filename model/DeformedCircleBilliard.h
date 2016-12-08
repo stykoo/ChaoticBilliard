@@ -8,8 +8,8 @@ class DeformedCircleBilliard : public AbstractBilliard {
 		DeformedCircleBilliard(double eps, double r = 1.0);
 		~DeformedCircleBilliard(){}
 
-        double rad(const double theta) const;
-		double max() const;
+        double rho(const double theta) const;
+		double rhoMax() const;
 
 		DeformedCircleBilliard* clone() const { 
             return new DeformedCircleBilliard(*this); 
