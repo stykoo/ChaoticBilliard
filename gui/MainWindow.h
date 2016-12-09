@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QtWidgets>
+#include <memory>
+#include "../model/Billiards.h"
 
 class WidgetPhysicalSpace;
 class WidgetParametersSpace;
@@ -10,6 +12,7 @@ class MainWindow : public QWidget
 {
     public:
 		MainWindow();
+        ~MainWindow();
 
     private:
 		void nextTimestep();
@@ -22,9 +25,7 @@ class MainWindow : public QWidget
 		QPushButton *shapeButton;
 		QPushButton *quitButton;
 
-		int currentTime;
-		double currentTheta;
-		double currentAlpha;
+        std::shared_ptr<AbstractBilliard> billiard;
 };
 
 #endif

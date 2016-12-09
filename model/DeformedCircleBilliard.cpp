@@ -1,8 +1,9 @@
 #include <cmath>
 #include "DeformedCircleBilliard.h"
 
-DeformedCircleBilliard::DeformedCircleBilliard(double eps, double r) :
-    AbstractBilliard(), eps(eps), r(r) {}
+DeformedCircleBilliard::DeformedCircleBilliard(
+        const double eps, const double theta, const double alpha, double r) :
+    AbstractBilliard(theta, alpha), eps(eps), r(r) {}
 
 double DeformedCircleBilliard::rho(const double theta) const {
 	return r + eps*std::cos(theta);

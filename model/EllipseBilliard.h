@@ -5,7 +5,8 @@
 
 class EllipseBilliard : public AbstractBilliard {
 	public:
-		EllipseBilliard(double e, double p = 1.0);
+		EllipseBilliard(const double e, const double theta, const double alpha,
+                        const double p = 1.0);
 		~EllipseBilliard(){};
 
         double rho(const double theta) const;

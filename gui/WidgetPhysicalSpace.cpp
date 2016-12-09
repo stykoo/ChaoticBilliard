@@ -1,9 +1,9 @@
 #include "WidgetPhysicalSpace.h"
 
-WidgetPhysicalSpace::WidgetPhysicalSpace(const AbstractBilliard &bil,
+WidgetPhysicalSpace::WidgetPhysicalSpace(std::shared_ptr<AbstractBilliard> bil,
                                          QWidget *parent) : QWidget(parent) {
     setBackgroundRole(QPalette::Base);
-	billiard = bil.clone();
+	billiard = bil;
 
 	const double rad = PHYSPACE_SIZE / (2. * billiard->rhoMax());
 	QVector<QPointF> billPoints(NB_ANGULAR_DIVISIONS);
@@ -18,7 +18,6 @@ WidgetPhysicalSpace::WidgetPhysicalSpace(const AbstractBilliard &bil,
 }
 
 WidgetPhysicalSpace::~WidgetPhysicalSpace() {
-	delete billiard;
     delete stroke;
 }
 
@@ -30,11 +29,11 @@ QSize WidgetPhysicalSpace::sizeHint() const {
     return minimumSizeHint();
 }
 
-void WidgetPhysicalSpace::setBilliard(const AbstractBilliard &bil) {
-	delete billiard;
+void WidgetPhysicalSpace::setBilliard(std::shared_ptr<AbstractBilliard> bil) {
+	billiard.reset();
     delete stroke;
 
-	billiard = bil.clone();
+	billiard = bil;
 
 	const double rad = PHYSPACE_SIZE / (2. * billiard->rhoMax());
 	QVector<QPointF> billPoints(NB_ANGULAR_DIVISIONS);

@@ -5,7 +5,8 @@
 
 class DeformedCircleBilliard : public AbstractBilliard {
 	public:
-		DeformedCircleBilliard(double eps, double r = 1.0);
+		DeformedCircleBilliard(const double eps, const double theta,
+                               const double alpha, const double r = 1.0);
 		~DeformedCircleBilliard(){}
 
         double rho(const double theta) const;

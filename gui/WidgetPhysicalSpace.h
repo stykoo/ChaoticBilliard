@@ -5,6 +5,7 @@
 #define PHYSPACE_SIZE 400
 
 #include <QtWidgets>
+#include <memory>
 #include "../model/Billiards.h"
 
 class WidgetPhysicalSpace : public QWidget
@@ -12,19 +13,20 @@ class WidgetPhysicalSpace : public QWidget
     Q_OBJECT
 
 	public:
-		WidgetPhysicalSpace(const AbstractBilliard &bil, QWidget *parent = 0);
+		WidgetPhysicalSpace(std::shared_ptr<AbstractBilliard> bil,
+                            QWidget *parent = 0);
 		~WidgetPhysicalSpace();
 		QSize minimumSizeHint() const;
 		QSize sizeHint() const;
-		void setBilliard(const AbstractBilliard &bil);
+		void setBilliard(std::shared_ptr<AbstractBilliard> bil);
 		void addPoint(const double theta);
 
 	protected:
 		void paintEvent(QPaintEvent *event);
 
 	private:
-		AbstractBilliard *billiard;
-		QPolygonF *stroke;
+        std::shared_ptr<AbstractBilliard> billiard;
+        QPolygonF *stroke;
 		QList<QPointF> pointHistory;
 };
 

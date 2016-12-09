@@ -5,7 +5,8 @@
 
 MainWindow::MainWindow()
 {
-	CircleBilliard billiard(0.5);
+    const double theta0 = 0., alpha0 = 6 * M_PI / 7;
+	billiard = std::make_shared<CircleBilliard>(theta0, alpha0);
 	widgetPhys = new WidgetPhysicalSpace(billiard);
 	widgetParams = new WidgetParametersSpace();
 
@@ -32,12 +33,20 @@ MainWindow::MainWindow()
 
     setWindowTitle(tr("Billiard"));
 
-    double theta = 0, alpha = 5. * M_PI / 6. + 1e-4;
-	widgetPhys->addPoint(theta);
-    for (int i = 0 ; i < 1000 ; ++i) {
-        theta = billiard.nextPosition(theta, alpha);
-        alpha = billiard.nextDirection(alpha, theta);
-        widgetPhys->addPoint(theta);
+    widgetPhys->addPoint(theta0);
+    for (int i = 0 ; i < 100 ; ++i) {
+        billiard->updatePositionAndDirection();
+        widgetPhys->addPoint(billiard->getTheta());
     }
+}
+
+MainWindow::~MainWindow() {
+    delete widgetPhys; 
+    delete widgetParams; 
+    delete reinitButton; 
+    delete startButton; 
+    delete paramButton; 
+    delete shapeButton; 
+    delete quitButton; 
 }
 
