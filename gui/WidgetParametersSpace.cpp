@@ -1,12 +1,16 @@
 #include "WidgetParametersSpace.h"
 
-WidgetParametersSpace::WidgetParametersSpace(QWidget *parent) :
-        QWidget(parent) {
+WidgetParametersSpace::WidgetParametersSpace(const int pointsize,
+        const double xMin, const double xMax,
+        const double yMin, const double yMax,
+        QWidget *parent) : QWidget(parent), pointsize(pointsize),
+        xMin(xMin), xMax(xMax), yMin(yMin), yMax(yMax) {
     setBackgroundRole(QPalette::Base);
 
 	pixels = new QImage(PARAMSPACE_WIDTH, PARAMSPACE_HEIGHT,
                         QImage::Format_RGB32);
-	pixels->fill(Qt::white);
+    clearImage();
+    changeColor();
 }
 
 WidgetParametersSpace::~WidgetParametersSpace() {
@@ -23,15 +27,30 @@ QSize WidgetParametersSpace::sizeHint() const
 	return minimumSizeHint();
 }
 
-void WidgetParametersSpace::addPoint(const std::tuple<double, double> coos,
-        const double xMin, const double xMax, const double yMin,
-        const double yMax) {
+void WidgetParametersSpace::addPoint(const std::tuple<double, double> coos) {
     int x_screen = PARAMSPACE_WIDTH * \
         (std::get<0>(coos) - xMin) / (xMax - xMin);
     int y_screen = PARAMSPACE_HEIGHT * \
         (std::get<1>(coos) - yMin) / (yMax - yMin);
-    pixels->setPixel(x_screen, y_screen, qRgb(255, 0, 0));
+
+    int dx1 = (pointsize - 1) / 2, dx2 = pointsize / 2;
+    for (int i = x_screen - dx1 ; i <= x_screen + dx2 ; ++i) {
+        for (int j = y_screen - dx1 ; j <= y_screen + dx2 ; ++j) {
+                if (i >= 0 && j >= 0 && i < PARAMSPACE_WIDTH &&
+                    j < PARAMSPACE_HEIGHT) {
+                    pixels->setPixelColor(i, j, color);
+                }
+        }
+    }
     repaint();
+}
+
+void WidgetParametersSpace::changeColor() {
+    color.setRgb(qrand() % 255, qrand() % 255, qrand() % 255);
+}
+
+void WidgetParametersSpace::clearImage() {
+	pixels->fill(Qt::white);
 }
 
 void WidgetParametersSpace::paintEvent(QPaintEvent *event)
