@@ -7,15 +7,6 @@ WidgetParametersSpace::WidgetParametersSpace(QWidget *parent) :
 	pixels = new QImage(PARAMSPACE_WIDTH, PARAMSPACE_HEIGHT,
                         QImage::Format_RGB32);
 	pixels->fill(Qt::white);
-
-	for(int x=0 ; x<PARAMSPACE_WIDTH ; x++){
-		for(int y=0 ; y<PARAMSPACE_HEIGHT ; y++){
-			if(qrand() % 10 == 0){
-				pixels->setPixel(x, y, qRgb((qrand()%256), (qrand()%256),
-                                            (qrand()%256)));
-			}
-		}
-	}
 }
 
 WidgetParametersSpace::~WidgetParametersSpace() {
@@ -30,6 +21,17 @@ QSize WidgetParametersSpace::minimumSizeHint() const
 QSize WidgetParametersSpace::sizeHint() const
 {
 	return minimumSizeHint();
+}
+
+void WidgetParametersSpace::addPoint(const std::tuple<double, double> coos,
+        const double xMin, const double xMax, const double yMin,
+        const double yMax) {
+    int x_screen = PARAMSPACE_WIDTH * \
+        (std::get<0>(coos) - xMin) / (xMax - xMin);
+    int y_screen = PARAMSPACE_HEIGHT * \
+        (std::get<1>(coos) - yMin) / (yMax - yMin);
+    pixels->setPixel(x_screen, y_screen, qRgb(255, 0, 0));
+    repaint();
 }
 
 void WidgetParametersSpace::paintEvent(QPaintEvent *event)

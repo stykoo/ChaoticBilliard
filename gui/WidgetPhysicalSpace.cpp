@@ -52,6 +52,7 @@ void WidgetPhysicalSpace::addPoint(const double theta) {
     double x, y;
     std::tie(x, y) = billiard->xy(theta);
 	pointHistory.prepend(QPointF(rad * x, rad * y));
+    repaint();
 }
 
 void WidgetPhysicalSpace::paintEvent(QPaintEvent *event) {

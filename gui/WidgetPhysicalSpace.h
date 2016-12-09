@@ -8,8 +8,7 @@
 #include <memory>
 #include "../model/Billiards.h"
 
-class WidgetPhysicalSpace : public QWidget
-{
+class WidgetPhysicalSpace : public QWidget {
     Q_OBJECT
 
 	public:

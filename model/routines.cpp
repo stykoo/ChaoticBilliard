@@ -10,7 +10,7 @@ double wrapAngle(double angle) {
     angle = std::fmod(angle, 2. * M_PI); 
     if (angle < 0)
         angle += 2 * M_PI;
-    return angle;
+    return angle - M_PI;
 }
 
 void solveSecondOrderEq(const double a, const double b, const double c,
