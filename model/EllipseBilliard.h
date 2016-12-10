@@ -6,17 +6,20 @@
 class EllipseBilliard : public AbstractBilliard {
 	public:
 		EllipseBilliard(const double e, const double theta, const double alpha,
-                        const double p = 1.0);
+                        const double a = 1.0);
 		~EllipseBilliard(){};
 
         double rho(const double theta) const;
 		double rhoMax() const;
-        double nextPosition(const double theta, const double alpha);
+        std::tuple<double, double> xy(const double theta) const;
 
 		EllipseBilliard* clone() const { return new EllipseBilliard(*this); }
 
-	private:
-		const double e, p;
+	protected:
+        double nextPosition() const;
+        double nextDirection() const;
+
+		double a, b;
 };
 
 #endif

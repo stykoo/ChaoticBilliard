@@ -15,7 +15,7 @@ class WidgetParametersSpace : public QWidget {
 	public:
 		WidgetParametersSpace(const int pointsize=2,
             const double xMin = -M_PI, const double xMax = M_PI,
-            const double yMin = -M_PI, const double yMax = +M_PI,
+            const double yMin = -M_PI/2., const double yMax = +M_PI/2.,
             QWidget *parent = 0);
 		~WidgetParametersSpace();
 		QSize minimumSizeHint() const;

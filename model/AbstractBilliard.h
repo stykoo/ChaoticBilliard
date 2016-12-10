@@ -17,7 +17,7 @@ class AbstractBilliard {
 		virtual double rhoMax() const = 0;
 		virtual AbstractBilliard* clone() const = 0;
 
-        std::tuple<double, double> xy(const double theta) const {
+        virtual std::tuple<double, double> xy(const double theta) const {
             double rd = rho(theta);
             return std::make_tuple(rd * std::cos(theta), rd * std::sin(theta));
         }
@@ -29,32 +29,29 @@ class AbstractBilliard {
         std::tuple<double, double> getXY() const {
             return xy(currentTheta);
         }
-        std::tuple<double, double> getPhaseCoos() {
+        std::tuple<double, double> getPhaseCoos() const {
             return std::make_tuple(currentTheta,
-                wrapAngle(currentAlpha - currentTheta - M_PI));
+                wrapAngle(M_PI - currentAlpha + currentTheta));
         }
 
-        virtual double nextPosition(const double theta, const double alpha)
-           const {
-               assert(false);
-               (void) theta;
-               (void) alpha;
-           return 0;
-        }
-        virtual double nextDirection(const double alpha, const double theta)
-           const {
-               assert(false);
-               (void) theta;
-               (void) alpha;
-           return 0;
-        }
-        virtual void updatePositionAndDirection() {
-            currentTheta = nextPosition(currentTheta, currentAlpha);     
-            currentAlpha = nextDirection(currentAlpha, currentTheta);     
+        void updatePositionAndDirection() {
+            currentTheta = nextPosition();     
+            currentAlpha = nextDirection();     
         }
 
-    private:
+    protected:
         AbstractBilliard();
+        virtual double nextPosition()
+           const {
+               assert(false);
+           return 0;
+        }
+        virtual double nextDirection()
+           const {
+               assert(false);
+           return 0;
+        }
+
         double currentTheta, currentAlpha;
 };
 

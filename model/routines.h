@@ -3,6 +3,10 @@
 
 #include <functional>
 
+inline double square(const double x) {
+    return x*x;
+}
+
 double wrapAngle(double angle);
 void solveSecondOrderEq(const double a, const double b, const double c,
                         double &sol1, double &sol2);

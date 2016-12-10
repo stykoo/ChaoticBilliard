@@ -15,12 +15,10 @@ double CircleBilliard::rhoMax() const {
 	return r;
 }
 
-double CircleBilliard::nextPosition(const double theta, const double alpha) 
-        const {
-    return wrapAngle(-theta + 2 * alpha - M_PI);
+double CircleBilliard::nextPosition() const {
+    return wrapAngle(-currentTheta + 2 * currentAlpha - M_PI);
 }
 
-double CircleBilliard::nextDirection(const double alpha, const double theta)
-        const {
-    return wrapAngle(2 * theta - alpha);
+double CircleBilliard::nextDirection() const {
+    return wrapAngle(2 * currentTheta - currentAlpha);
 }

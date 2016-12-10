@@ -12,7 +12,8 @@ WidgetPhysicalSpace::WidgetPhysicalSpace(std::shared_ptr<AbstractBilliard> bil,
         double x, y;
         std::tie(x, y) = billiard->xy(theta);
 		billPoints[i].setX(rad * x);
-		billPoints[i].setY(rad * y);
+        // Minus sign on y because of the orientation used by Qt (up->down)
+		billPoints[i].setY(- rad * y);
 	}
 	stroke = new QPolygonF(billPoints);
 }
@@ -51,7 +52,8 @@ void WidgetPhysicalSpace::addPoint(const double theta) {
 	const double rad = PHYSPACE_SIZE / (2. * billiard->rhoMax());
     double x, y;
     std::tie(x, y) = billiard->xy(theta);
-	pointHistory.prepend(QPointF(rad * x, rad * y));
+    // Minus sign on y because of the orientation used by Qt (up->down)
+	pointHistory.append(QPointF(rad * x, -rad * y));
     repaint();
 }
 

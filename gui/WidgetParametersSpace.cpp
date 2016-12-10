@@ -30,16 +30,16 @@ QSize WidgetParametersSpace::sizeHint() const
 void WidgetParametersSpace::addPoint(const std::tuple<double, double> coos) {
     int x_screen = PARAMSPACE_WIDTH * \
         (std::get<0>(coos) - xMin) / (xMax - xMin);
+    // Minus sign on y because of the orientation used by Qt (up->down)
     int y_screen = PARAMSPACE_HEIGHT * \
-        (std::get<1>(coos) - yMin) / (yMax - yMin);
+        (-std::get<1>(coos) - yMin) / (yMax - yMin);
 
     int dx1 = (pointsize - 1) / 2, dx2 = pointsize / 2;
     for (int i = x_screen - dx1 ; i <= x_screen + dx2 ; ++i) {
         for (int j = y_screen - dx1 ; j <= y_screen + dx2 ; ++j) {
-                if (i >= 0 && j >= 0 && i < PARAMSPACE_WIDTH &&
-                    j < PARAMSPACE_HEIGHT) {
-                    pixels->setPixelColor(i, j, color);
-                }
+            pixels->setPixelColor((i+PARAMSPACE_WIDTH)%PARAMSPACE_WIDTH,
+                                  (j+PARAMSPACE_HEIGHT)%PARAMSPACE_HEIGHT,
+                                  color);
         }
     }
     repaint();

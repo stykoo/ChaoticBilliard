@@ -12,12 +12,12 @@ class CircleBilliard : public AbstractBilliard {
         double rho(const double theta) const;
 		double rhoMax() const;
 
-        double nextPosition(const double theta, const double alpha) const;
-        double nextDirection(const double alpha, const double theta) const;
-
 		CircleBilliard* clone() const { return new CircleBilliard(*this); }
 
-	private:
+	protected:
+        double nextPosition() const;
+        double nextDirection() const;
+
 		const double r;
 };
 

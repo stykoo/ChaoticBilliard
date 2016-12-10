@@ -16,7 +16,7 @@ class DeformedCircleBilliard : public AbstractBilliard {
             return new DeformedCircleBilliard(*this); 
         }
 
-	private:
+	protected:
 		const double eps, r;
 };
 
