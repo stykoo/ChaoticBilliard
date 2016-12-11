@@ -31,12 +31,26 @@ class AbstractBilliard {
         }
         std::tuple<double, double> getPhaseCoos() const {
             return std::make_tuple(currentTheta,
-                wrapAngle(M_PI - currentAlpha + currentTheta));
+                direction2incidence(currentAlpha, currentTheta));
+        }
+
+        void setPositionAndIncidence(const double theta, const double beta) {
+            currentTheta = wrapAngle(theta);
+            currentAlpha = incidence2direction(beta, theta);
         }
 
         void updatePositionAndDirection() {
             currentTheta = nextPosition();     
             currentAlpha = nextDirection();     
+        }
+
+        static double incidence2direction(const double beta,
+                                          const double theta) {
+            return wrapAngle(M_PI - beta + theta);
+        }
+        static double direction2incidence(const double alpha,
+                                          const double theta) {
+            return wrapAngle(M_PI - alpha + theta);
         }
 
     protected:

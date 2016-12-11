@@ -30,6 +30,11 @@ QSize WidgetPhysicalSpace::sizeHint() const {
     return minimumSizeHint();
 }
 
+void WidgetPhysicalSpace::clearHistory() {
+    pointHistory.clear();
+    repaint();
+}
+
 void WidgetPhysicalSpace::setBilliard(std::shared_ptr<AbstractBilliard> bil) {
 	billiard.reset();
     delete stroke;
@@ -46,6 +51,8 @@ void WidgetPhysicalSpace::setBilliard(std::shared_ptr<AbstractBilliard> bil) {
 		billPoints[i].setY(rad * y);
 	}
 	stroke = new QPolygonF(billPoints);
+    clearHistory();
+    repaint();
 }
 
 void WidgetPhysicalSpace::addPoint(const double theta) {

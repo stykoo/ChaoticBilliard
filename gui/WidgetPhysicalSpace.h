@@ -17,6 +17,7 @@ class WidgetPhysicalSpace : public QWidget {
 		~WidgetPhysicalSpace();
 		QSize minimumSizeHint() const;
 		QSize sizeHint() const;
+        void clearHistory();
 		void setBilliard(std::shared_ptr<AbstractBilliard> bil);
 		void addPoint(const double theta);
 
