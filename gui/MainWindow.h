@@ -22,6 +22,8 @@ class MainWindow : public QWidget
     public slots:
         void reloadParameters();
         void resetBilliard();
+        void play();
+        void pause();
         void forward();
         void manageShapeGroup(int selectedIndex);
 
@@ -36,7 +38,6 @@ class MainWindow : public QWidget
 		WidgetParametersSpace *widgetParams;
 
         QLabel *currentStateLabel;
-
         QToolBar *toolbar;
         QAction *playAction;
         QAction *pauseAction;
@@ -62,6 +63,7 @@ class MainWindow : public QWidget
 
 		QPushButton *quitButton;
 
+        QTimer *nextTimer;
         std::shared_ptr<AbstractBilliard> billiard;
         unsigned int iter = 0;
 };

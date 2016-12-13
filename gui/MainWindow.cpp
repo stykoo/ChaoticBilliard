@@ -43,8 +43,12 @@ MainWindow::MainWindow() {
     mainLayout->addWidget(quitButton, 0, Qt::AlignRight);
     setLayout(mainLayout);
 
+    nextTimer = new QTimer(this);
+    nextTimer->setInterval(1000. / DEFAULT_SPEED);
+
     setWindowTitle(tr("Billiard"));
     connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(nextTimer, SIGNAL(timeout()), this, SLOT(forward()));
 }
 
 void MainWindow::reloadParameters() {
@@ -57,6 +61,8 @@ void MainWindow::reloadParameters() {
 
     iter = 0;
     updateCurrentStateLabel();
+    nextTimer->setInterval(1000. / speedSpinBox->value());
+    pause();
 }
 
 void MainWindow::resetBilliard() {
@@ -89,6 +95,20 @@ void MainWindow::resetBilliard() {
 
     iter = 0;
     updateCurrentStateLabel();
+    nextTimer->setInterval(1000. / speedSpinBox->value());
+    pause();
+}
+
+void MainWindow::play() {
+    playAction->setDisabled(true);
+    pauseAction->setDisabled(false);
+    nextTimer->start();
+}
+
+void MainWindow::pause() {
+    playAction->setDisabled(false);
+    pauseAction->setDisabled(true);
+    nextTimer->stop();
 }
 
 void MainWindow::forward() {
@@ -125,6 +145,7 @@ void MainWindow::createToolbar() {
         style()->standardIcon(QStyle::SP_MediaPlay), tr("Play"));
     pauseAction = toolbar->addAction(
         style()->standardIcon(QStyle::SP_MediaPause), tr("Pause"));
+    pauseAction->setDisabled(true);
     forwardAction = toolbar->addAction(
         style()->standardIcon(QStyle::SP_MediaSkipForward),
                               tr("Next iteration"));
@@ -132,6 +153,8 @@ void MainWindow::createToolbar() {
         style()->standardIcon(QStyle::SP_BrowserReload),
                               tr("Reset"));
 
+    connect(playAction, SIGNAL(triggered()), this, SLOT(play()));
+    connect(pauseAction, SIGNAL(triggered()), this, SLOT(pause()));
     connect(forwardAction, SIGNAL(triggered()), this, SLOT(forward()));
     connect(resetAction, SIGNAL(triggered()), this, SLOT(resetBilliard()));
 }
