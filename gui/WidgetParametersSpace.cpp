@@ -10,7 +10,7 @@ WidgetParametersSpace::WidgetParametersSpace(const int pointsize,
 	pixels = new QImage(PARAMSPACE_WIDTH, PARAMSPACE_HEIGHT,
                         QImage::Format_RGB32);
     clearImage();
-    changeColor();
+    color.setHsv(0, 255, 224);
 }
 
 WidgetParametersSpace::~WidgetParametersSpace() {
@@ -45,8 +45,8 @@ void WidgetParametersSpace::addPoint(const std::tuple<double, double> coos) {
     repaint();
 }
 
-void WidgetParametersSpace::changeColor() {
-    color.setRgb(qrand() % 255, qrand() % 255, qrand() % 255);
+void WidgetParametersSpace::setColor(const QColor &c) {
+    color = c;
 }
 
 void WidgetParametersSpace::clearImage() {

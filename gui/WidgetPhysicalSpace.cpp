@@ -16,6 +16,8 @@ WidgetPhysicalSpace::WidgetPhysicalSpace(std::shared_ptr<AbstractBilliard> bil,
 		billPoints[i].setY(- rad * y);
 	}
 	stroke = new QPolygonF(billPoints);
+
+    color.setHsv(0, 255, 224);
 }
 
 WidgetPhysicalSpace::~WidgetPhysicalSpace() {
@@ -64,6 +66,10 @@ void WidgetPhysicalSpace::addPoint(const double theta) {
     repaint();
 }
 
+void WidgetPhysicalSpace::setColor(const QColor &c) {
+    color = c;
+}
+
 void WidgetPhysicalSpace::paintEvent(QPaintEvent *event) {
 	(void) event; // Unused parameter
     QPainter painter(this);
@@ -71,11 +77,11 @@ void WidgetPhysicalSpace::paintEvent(QPaintEvent *event) {
 
 	painter.translate(width() / 2, height() / 2);
 
-	painter.setPen(QPen(QColor(0, 0, 255, 255), 3));
-	painter.drawConvexPolygon(*stroke);
-
-	painter.setPen(QPen(QColor(255, 0, 0, 127), 1));
+	painter.setPen(QPen(color, 1));
 	for(int i=0 ; i<pointHistory.size()-1 ; ++i){
 		painter.drawLine(pointHistory[i], pointHistory[i+1]);
 	}
+
+	painter.setPen(QPen(QColor(64, 64, 64, 255), 3));
+	painter.drawConvexPolygon(*stroke);
 }

@@ -4,14 +4,19 @@
 #include "../model/Billiards.h"
 
 MainWindow::MainWindow() {
+	qsrand(QTime::currentTime().msec());
+
 	billiard = std::make_shared<CircleBilliard>(
         DEFAULT_ANGLE * M_PI / 180.,
         AbstractBilliard::incidence2direction(DEFAULT_INCIDENCE * M_PI / 180.,
                                               DEFAULT_ANGLE * M_PI / 180.));
+    QColor color = QColor::fromHsv(qrand() % 360, 255, 224);
 	widgetPhys = new WidgetPhysicalSpace(billiard);
-    widgetPhys->addPoint(DEFAULT_ANGLE);
+    widgetPhys->setColor(color);
+    widgetPhys->addPoint(DEFAULT_ANGLE * M_PI / 180.);
 
 	widgetParams = new WidgetParametersSpace();
+	widgetParams->setColor(color);
     widgetParams->addPoint(billiard->getPhaseCoos());
 
     QHBoxLayout *areasLayout = new QHBoxLayout;
@@ -34,6 +39,7 @@ MainWindow::MainWindow() {
 	mainLayout->addLayout(areasLayout);
     mainLayout->addLayout(toolbarLayout);
     mainLayout->addLayout(groupsLayout);
+    mainLayout->addStretch();
     mainLayout->addWidget(quitButton, 0, Qt::AlignRight);
     setLayout(mainLayout);
 
@@ -50,8 +56,12 @@ void MainWindow::reloadParameters() {
     double beta = incidenceSpinBox->value() * M_PI / 180.;
     billiard->setPositionAndIncidence(theta, beta);
 
+    QColor color = QColor::fromHsv(qrand() % 360, 255, 224);
+
     widgetPhys->clearHistory();
-    widgetParams->changeColor();
+    widgetPhys->setColor(color);
+    widgetPhys->addPoint(theta);
+    widgetParams->setColor(color);
 
     iter = 0;
     updateCurrentStateLabel();
@@ -79,11 +89,14 @@ void MainWindow::resetBilliard() {
             theta, AbstractBilliard::incidence2direction(beta, theta));
     }
 
+    QColor color = QColor::fromHsv(qrand() % 360, 255, 224);
+
     widgetPhys->setBilliard(billiard);
+    widgetPhys->setColor(color);
     widgetPhys->addPoint(theta);
 
     widgetParams->clearImage();
-    widgetParams->changeColor();
+    widgetParams->setColor(color);
     widgetParams->addPoint(billiard->getPhaseCoos());
 
     iter = 0;
@@ -261,8 +274,8 @@ void MainWindow::createShapeGroup() {
     groupLayout->addWidget(shapeCombo);
     groupLayout->addLayout(shapeEllipseLayout);
     groupLayout->addLayout(shapeDefCircleLayout);
-    groupLayout->addStretch();
     groupLayout->addWidget(shapeButton, 0, Qt::AlignRight);
+    groupLayout->addStretch();
     shapeGroup->setLayout(groupLayout);
 
     connect(shapeCombo, SIGNAL(currentIndexChanged(int)), this,

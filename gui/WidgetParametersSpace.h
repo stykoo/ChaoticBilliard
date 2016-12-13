@@ -13,7 +13,7 @@ class WidgetParametersSpace : public QWidget {
     Q_OBJECT
 
 	public:
-		WidgetParametersSpace(const int pointsize=2,
+		WidgetParametersSpace(const int pointsize=3,
             const double xMin = -M_PI, const double xMax = M_PI,
             const double yMin = -M_PI/2., const double yMax = +M_PI/2.,
             QWidget *parent = 0);
@@ -22,7 +22,7 @@ class WidgetParametersSpace : public QWidget {
 		QSize sizeHint() const;
 
 		void addPoint(const std::tuple<double, double> coos);
-        void changeColor();
+        void setColor(const QColor &c);
         void clearImage();
 
 	protected:

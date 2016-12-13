@@ -20,6 +20,7 @@ class WidgetPhysicalSpace : public QWidget {
         void clearHistory();
 		void setBilliard(std::shared_ptr<AbstractBilliard> bil);
 		void addPoint(const double theta);
+        void setColor(const QColor &c);
 
 	protected:
 		void paintEvent(QPaintEvent *event);
@@ -27,6 +28,7 @@ class WidgetPhysicalSpace : public QWidget {
 	private:
         std::shared_ptr<AbstractBilliard> billiard;
         QPolygonF *stroke;
+        QColor color; 
 		QList<QPointF> pointHistory;
 };
 
