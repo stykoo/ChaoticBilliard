@@ -22,35 +22,38 @@ class MainWindow : public QWidget
     public slots:
         void reloadParameters();
         void resetBilliard();
+        void updateSpeed();
         void play();
         void pause();
         void forward();
         void manageShapeGroup(int selectedIndex);
 
     private:
-        void createToolbar();
+        void createToolbarGroup();
         void createParametersGroup();
         void createShapeGroup();
 		void nextTimestep();
+        void updateSpeedLabel();
         void updateCurrentStateLabel();
 
 		WidgetPhysicalSpace *widgetPhys;
 		WidgetParametersSpace *widgetParams;
 
-        QLabel *currentStateLabel;
+        QHBoxLayout *toolbarLayout;
         QToolBar *toolbar;
         QAction *playAction;
         QAction *pauseAction;
         QAction *forwardAction;
         QAction *resetAction;
+        QSlider *speedSlider;
+        QLabel *speedLabel;
+        QLabel *currentStateLabel;
 
         QGroupBox *parametersGroup;
         QLabel *angleLabel;
         QLabel *incidenceLabel;
-        QLabel *speedLabel;
         QDoubleSpinBox *angleSpinBox;
         QDoubleSpinBox *incidenceSpinBox;
-        QDoubleSpinBox *speedSpinBox;
         QPushButton *parametersButton;
 
         QGroupBox *shapeGroup;

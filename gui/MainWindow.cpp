@@ -18,13 +18,7 @@ MainWindow::MainWindow() {
 	areasLayout->addWidget(widgetPhys);
 	areasLayout->addWidget(widgetParams);
 
-    createToolbar();
-    currentStateLabel = new QLabel();
-    updateCurrentStateLabel();
-    QHBoxLayout *toolbarLayout = new QHBoxLayout();
-    toolbarLayout->addWidget(toolbar);
-    toolbarLayout->addWidget(currentStateLabel, 0, Qt::AlignLeft);
-    toolbarLayout->addStretch();
+    createToolbarGroup();
 
     createParametersGroup();
     createShapeGroup();
@@ -44,7 +38,7 @@ MainWindow::MainWindow() {
     setLayout(mainLayout);
 
     nextTimer = new QTimer(this);
-    nextTimer->setInterval(1000. / DEFAULT_SPEED);
+    nextTimer->setInterval(1000 / DEFAULT_SPEED);
 
     setWindowTitle(tr("Billiard"));
     connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
@@ -61,7 +55,6 @@ void MainWindow::reloadParameters() {
 
     iter = 0;
     updateCurrentStateLabel();
-    nextTimer->setInterval(1000. / speedSpinBox->value());
     pause();
 }
 
@@ -95,8 +88,12 @@ void MainWindow::resetBilliard() {
 
     iter = 0;
     updateCurrentStateLabel();
-    nextTimer->setInterval(1000. / speedSpinBox->value());
     pause();
+}
+
+void MainWindow::updateSpeed() {
+    updateSpeedLabel();
+    nextTimer->setInterval(1000 / speedSlider->value());
 }
 
 void MainWindow::play() {
@@ -139,7 +136,7 @@ void MainWindow::manageShapeGroup(int selectedIndex) {
     }
 }
 
-void MainWindow::createToolbar() {
+void MainWindow::createToolbarGroup() {
     toolbar = new QToolBar;
     playAction = toolbar->addAction(
         style()->standardIcon(QStyle::SP_MediaPlay), tr("Play"));
@@ -153,10 +150,41 @@ void MainWindow::createToolbar() {
         style()->standardIcon(QStyle::SP_BrowserReload),
                               tr("Reset"));
 
+    QFrame* line1 = new QFrame();
+    line1->setFrameShape(QFrame::VLine);
+    line1->setFrameShadow(QFrame::Sunken);
+
+    speedSlider = new QSlider(Qt::Horizontal);
+    speedSlider->setMinimum(1);
+    speedSlider->setMaximum(50);
+    speedSlider->setValue(DEFAULT_SPEED);
+    speedSlider->setMinimumSize(50, 5);
+    speedSlider->setMaximumSize(200, 50);
+
+    speedLabel = new QLabel();
+    updateSpeedLabel();
+
+    QFrame* line2 = new QFrame();
+    line2->setFrameShape(QFrame::VLine);
+    line2->setFrameShadow(QFrame::Sunken);
+
+    currentStateLabel = new QLabel();
+    updateCurrentStateLabel();
+
+    toolbarLayout = new QHBoxLayout();
+    toolbarLayout->addWidget(toolbar);
+    toolbarLayout->addWidget(line1);
+    toolbarLayout->addWidget(speedSlider);
+    toolbarLayout->addWidget(speedLabel);
+    toolbarLayout->addWidget(line2);
+    toolbarLayout->addWidget(currentStateLabel, 0, Qt::AlignLeft);
+    toolbarLayout->addStretch();
+
     connect(playAction, SIGNAL(triggered()), this, SLOT(play()));
     connect(pauseAction, SIGNAL(triggered()), this, SLOT(pause()));
     connect(forwardAction, SIGNAL(triggered()), this, SLOT(forward()));
     connect(resetAction, SIGNAL(triggered()), this, SLOT(resetBilliard()));
+    connect(speedSlider, SIGNAL(valueChanged(int)), this, SLOT(updateSpeed()));
 }
 
 void MainWindow::createParametersGroup() {
@@ -178,12 +206,6 @@ void MainWindow::createParametersGroup() {
     incidenceLabel = new QLabel(tr("Initial incidence angle:"));
     incidenceLabel->setBuddy(incidenceSpinBox);
 
-    speedSpinBox = new QDoubleSpinBox();
-    speedSpinBox->setRange(0.1, 100.);
-    speedSpinBox->setSingleStep(DEFAULT_SPEED);
-    speedSpinBox->setValue(2.);
-    speedLabel = new QLabel(tr("Speed (1/second):"));
-    speedLabel->setBuddy(speedSpinBox);
     parametersButton = new QPushButton("Apply");
 
     QGridLayout *groupLayout = new QGridLayout;
@@ -191,9 +213,7 @@ void MainWindow::createParametersGroup() {
     groupLayout->addWidget(angleSpinBox, 0, 1, 1, 1, Qt::AlignLeft);
     groupLayout->addWidget(incidenceLabel, 1, 0);
     groupLayout->addWidget(incidenceSpinBox, 1, 1, 1, 1, Qt::AlignLeft);
-    groupLayout->addWidget(speedLabel, 2, 0);
-    groupLayout->addWidget(speedSpinBox, 2, 1, 1, 1, Qt::AlignLeft);
-    groupLayout->addWidget(parametersButton, 3, 1, 1, 1, Qt::AlignRight);
+    groupLayout->addWidget(parametersButton, 2, 1, 1, 1, Qt::AlignRight);
     groupLayout->setAlignment(Qt::AlignTop);
     parametersGroup->setLayout(groupLayout);
 
@@ -248,6 +268,15 @@ void MainWindow::createShapeGroup() {
     connect(shapeCombo, SIGNAL(currentIndexChanged(int)), this,
             SLOT(manageShapeGroup(int)));
     connect(shapeButton, SIGNAL(clicked()), this, SLOT(resetBilliard()));
+}
+
+void MainWindow::updateSpeedLabel() {
+    QString text;
+    QTextStream stream(&text);
+
+    stream << "(speed: " << speedSlider->value() << ")";
+    
+    speedLabel->setText(text);
 }
 
 void MainWindow::updateCurrentStateLabel() {
