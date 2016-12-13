@@ -19,6 +19,13 @@ MainWindow::MainWindow() {
 	areasLayout->addWidget(widgetParams);
 
     createToolbar();
+    currentStateLabel = new QLabel();
+    updateCurrentStateLabel();
+    QHBoxLayout *toolbarLayout = new QHBoxLayout();
+    toolbarLayout->addWidget(toolbar);
+    toolbarLayout->addWidget(currentStateLabel, 0, Qt::AlignLeft);
+    toolbarLayout->addStretch();
+
     createParametersGroup();
     createShapeGroup();
 
@@ -27,15 +34,17 @@ MainWindow::MainWindow() {
     QHBoxLayout *groupsLayout = new QHBoxLayout;
     groupsLayout->addWidget(parametersGroup, 0, Qt::AlignLeft);
     groupsLayout->addWidget(shapeGroup, 0, Qt::AlignLeft);
+    groupsLayout->addStretch();
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
 	mainLayout->addLayout(areasLayout);
-    mainLayout->addWidget(toolbar);
+    mainLayout->addLayout(toolbarLayout);
     mainLayout->addLayout(groupsLayout);
     mainLayout->addWidget(quitButton, 0, Qt::AlignRight);
     setLayout(mainLayout);
 
     setWindowTitle(tr("Billiard"));
+    connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 void MainWindow::reloadParameters() {
@@ -44,8 +53,10 @@ void MainWindow::reloadParameters() {
     billiard->setPositionAndIncidence(theta, beta);
 
     widgetPhys->clearHistory();
-
     widgetParams->changeColor();
+
+    iter = 0;
+    updateCurrentStateLabel();
 }
 
 void MainWindow::resetBilliard() {
@@ -75,12 +86,18 @@ void MainWindow::resetBilliard() {
     widgetParams->clearImage();
     widgetParams->changeColor();
     widgetParams->addPoint(billiard->getPhaseCoos());
+
+    iter = 0;
+    updateCurrentStateLabel();
 }
 
 void MainWindow::forward() {
     billiard->updatePositionAndDirection();
     widgetPhys->addPoint(billiard->getTheta());
     widgetParams->addPoint(billiard->getPhaseCoos());
+
+    ++iter;
+    updateCurrentStateLabel();
 }
 
 void MainWindow::manageShapeGroup(int selectedIndex) {
@@ -111,15 +128,11 @@ void MainWindow::createToolbar() {
     forwardAction = toolbar->addAction(
         style()->standardIcon(QStyle::SP_MediaSkipForward),
                               tr("Next iteration"));
-    reloadAction = toolbar->addAction(
-        style()->standardIcon(QStyle::SP_DialogApplyButton),
-                              tr("Reload parameters"));
     resetAction = toolbar->addAction(
         style()->standardIcon(QStyle::SP_BrowserReload),
-                              tr("Change shape / Reset"));
+                              tr("Reset"));
 
     connect(forwardAction, SIGNAL(triggered()), this, SLOT(forward()));
-    connect(reloadAction, SIGNAL(triggered()), this, SLOT(reloadParameters()));
     connect(resetAction, SIGNAL(triggered()), this, SLOT(resetBilliard()));
 }
 
@@ -148,6 +161,7 @@ void MainWindow::createParametersGroup() {
     speedSpinBox->setValue(2.);
     speedLabel = new QLabel(tr("Speed (1/second):"));
     speedLabel->setBuddy(speedSpinBox);
+    parametersButton = new QPushButton("Apply");
 
     QGridLayout *groupLayout = new QGridLayout;
     groupLayout->addWidget(angleLabel, 0, 0);
@@ -156,8 +170,12 @@ void MainWindow::createParametersGroup() {
     groupLayout->addWidget(incidenceSpinBox, 1, 1, 1, 1, Qt::AlignLeft);
     groupLayout->addWidget(speedLabel, 2, 0);
     groupLayout->addWidget(speedSpinBox, 2, 1, 1, 1, Qt::AlignLeft);
+    groupLayout->addWidget(parametersButton, 3, 1, 1, 1, Qt::AlignRight);
     groupLayout->setAlignment(Qt::AlignTop);
     parametersGroup->setLayout(groupLayout);
+
+    connect(parametersButton, SIGNAL(clicked()), this,
+            SLOT(reloadParameters()));
 }
 
 void MainWindow::createShapeGroup() {
@@ -175,6 +193,8 @@ void MainWindow::createShapeGroup() {
     shapeEllipseSpinBox->setValue(0.1);
     shapeEllipseLabel = new QLabel(tr("Excentricity:"));
     angleLabel->setBuddy(angleSpinBox);
+    shapeEllipseLabel->hide();
+    shapeEllipseSpinBox->hide();
 
     shapeDefCircleSpinBox = new QDoubleSpinBox();
     shapeDefCircleSpinBox->setRange(0., 0.49);
@@ -184,6 +204,8 @@ void MainWindow::createShapeGroup() {
     shapeDefCircleLabel->setBuddy(shapeDefCircleSpinBox);
     shapeDefCircleLabel->hide();
     shapeDefCircleSpinBox->hide();
+
+    shapeButton = new QPushButton("Apply");
 
     QHBoxLayout *shapeEllipseLayout = new QHBoxLayout;
     shapeEllipseLayout->addWidget(shapeEllipseLabel, 0, Qt::AlignLeft);
@@ -196,9 +218,27 @@ void MainWindow::createShapeGroup() {
     groupLayout->addWidget(shapeCombo);
     groupLayout->addLayout(shapeEllipseLayout);
     groupLayout->addLayout(shapeDefCircleLayout);
-    groupLayout->setAlignment(Qt::AlignTop);
+    groupLayout->addStretch();
+    groupLayout->addWidget(shapeButton, 0, Qt::AlignRight);
     shapeGroup->setLayout(groupLayout);
 
     connect(shapeCombo, SIGNAL(currentIndexChanged(int)), this,
             SLOT(manageShapeGroup(int)));
+    connect(shapeButton, SIGNAL(clicked()), this, SLOT(resetBilliard()));
+}
+
+void MainWindow::updateCurrentStateLabel() {
+    QString text;
+    QTextStream stream(&text);
+
+    double theta, beta;
+    std::tie(theta, beta) = billiard->getPhaseCoos();
+    theta *= 180 / M_PI;
+    beta *= 180 / M_PI;
+
+    stream << QString::fromStdString(billiard->string()) << ", i=" << iter
+        << ", " << QChar(0x03B8) << "=" << theta << QChar(0x00B0) <<  ", "
+        << QChar(0x03B2) << "=" << beta << QChar(0x00B0);
+    
+    currentStateLabel->setText(text);
 }

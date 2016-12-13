@@ -15,6 +15,10 @@ double CircleBilliard::rhoMax() const {
 	return r;
 }
 
+std::string CircleBilliard::string() const {
+    return "Circle";
+}
+
 double CircleBilliard::nextPosition() const {
     return wrapAngle(-currentTheta + 2 * currentAlpha - M_PI);
 }

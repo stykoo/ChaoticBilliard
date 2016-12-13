@@ -7,7 +7,11 @@ int sign(const double x) {
 }
 
 double wrapAngle(double angle) {
-    return angle - std::ceil(angle / (2. * M_PI)) * 2 * M_PI; 
+    angle -= std::floor(angle / (2. * M_PI)) * 2 * M_PI; 
+    if (angle > M_PI) {
+        angle -= 2 * M_PI;
+    }
+    return angle;
 }
 
 void solveSecondOrderEq(const double a, const double b, const double c,

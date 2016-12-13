@@ -13,3 +13,7 @@ double DeformedCircleBilliard::rhoMax() const {
 	return r + eps;
 }
 
+std::string DeformedCircleBilliard::string() const {
+    return "Deformed circle (eps="+std::to_string(eps)+")";
+}
+

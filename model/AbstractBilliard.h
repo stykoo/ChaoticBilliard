@@ -2,6 +2,7 @@
 #define ABSTRACT_BILLIARD_H
 
 #include <cmath>
+#include <string>
 #include <tuple>
 #include <cassert>
 #include "routines.h"
@@ -15,6 +16,7 @@ class AbstractBilliard {
 
 		virtual double rho(const double theta) const = 0;
 		virtual double rhoMax() const = 0;
+        virtual std::string string() const = 0;
 		virtual AbstractBilliard* clone() const = 0;
 
         virtual std::tuple<double, double> xy(const double theta) const {

@@ -11,6 +11,7 @@ class EllipseBilliard : public AbstractBilliard {
 
         double rho(const double theta) const;
 		double rhoMax() const;
+        std::string string() const;
         std::tuple<double, double> xy(const double theta) const;
 
 		EllipseBilliard* clone() const { return new EllipseBilliard(*this); }
@@ -19,7 +20,7 @@ class EllipseBilliard : public AbstractBilliard {
         double nextPosition() const;
         double nextDirection() const;
 
-		double a, b;
+		double a, b, e;
 };
 
 #endif

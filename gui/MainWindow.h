@@ -30,15 +30,17 @@ class MainWindow : public QWidget
         void createParametersGroup();
         void createShapeGroup();
 		void nextTimestep();
+        void updateCurrentStateLabel();
 
 		WidgetPhysicalSpace *widgetPhys;
 		WidgetParametersSpace *widgetParams;
+
+        QLabel *currentStateLabel;
 
         QToolBar *toolbar;
         QAction *playAction;
         QAction *pauseAction;
         QAction *forwardAction;
-        QAction *reloadAction;
         QAction *resetAction;
 
         QGroupBox *parametersGroup;
@@ -48,6 +50,7 @@ class MainWindow : public QWidget
         QDoubleSpinBox *angleSpinBox;
         QDoubleSpinBox *incidenceSpinBox;
         QDoubleSpinBox *speedSpinBox;
+        QPushButton *parametersButton;
 
         QGroupBox *shapeGroup;
         QComboBox *shapeCombo;
@@ -55,10 +58,12 @@ class MainWindow : public QWidget
         QLabel *shapeDefCircleLabel;
         QDoubleSpinBox *shapeEllipseSpinBox;
         QDoubleSpinBox *shapeDefCircleSpinBox;
+        QPushButton *shapeButton;
 
 		QPushButton *quitButton;
 
         std::shared_ptr<AbstractBilliard> billiard;
+        unsigned int iter = 0;
 };
 
 #endif

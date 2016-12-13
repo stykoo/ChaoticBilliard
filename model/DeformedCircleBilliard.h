@@ -11,6 +11,7 @@ class DeformedCircleBilliard : public AbstractBilliard {
 
         double rho(const double theta) const;
 		double rhoMax() const;
+        std::string string() const;
 
 		DeformedCircleBilliard* clone() const { 
             return new DeformedCircleBilliard(*this); 

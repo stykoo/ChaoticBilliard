@@ -5,7 +5,7 @@
 
 EllipseBilliard::EllipseBilliard(const double e, const double theta,
                                  const double alpha, const double a) :
-        AbstractBilliard(theta, alpha), a(a) {
+        AbstractBilliard(theta, alpha), a(a), e(e) {
     b = a * std::sqrt(1 - e*e);
 }
 
@@ -15,6 +15,10 @@ double EllipseBilliard::rho(const double theta) const {
 
 double EllipseBilliard::rhoMax() const {
 	return a;
+}
+
+std::string EllipseBilliard::string() const {
+    return "Ellipse (e="+std::to_string(e)+")";
 }
 
 std::tuple<double, double> EllipseBilliard::xy(const double theta) const {
