@@ -1,5 +1,4 @@
 #include <cmath>
-#include <iostream>
 #include "EllipseBilliard.h"
 #include "routines.h"
 
@@ -37,7 +36,8 @@ double EllipseBilliard::nextPosition() const {
     double w = - (u*x0 + v*y0);
 
     // If v is small, we swap the roles of x and y to avoid division by zero
-    if (std::abs(v) < std::abs(u)){
+    bool swapXY = std::abs(v) < std::abs(u);
+    if (swapXY){
         std::swap(u, v);
         std::swap(x0, y0);
         std::swap(s1, s2);
@@ -64,9 +64,8 @@ double EllipseBilliard::nextPosition() const {
     }
 
     // We swap back if needed
-    if (std::abs(v) < std::abs(u)){
+    if (swapXY){
         std::swap(xNext, yNext);
-        // std::swap(x0, y0);
     }
 
     double thetaNext = std::atan2(yNext, xNext);
