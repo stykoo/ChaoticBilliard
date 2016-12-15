@@ -19,10 +19,10 @@ std::string CircleBilliard::string() const {
     return "Circle";
 }
 
-double CircleBilliard::nextPosition() const {
+double CircleBilliard::nextPosition() {
     return wrapAngle(-currentTheta + 2 * currentAlpha - M_PI);
 }
 
-double CircleBilliard::nextDirection() const {
+double CircleBilliard::nextDirection() {
     return wrapAngle(2 * currentTheta - currentAlpha);
 }

@@ -13,14 +13,17 @@ class EllipseBilliard : public AbstractBilliard {
 		double rhoMax() const;
         std::string string() const;
         std::tuple<double, double> xy(const double theta) const;
+        void setPositionAndIncidence(const double theta, const double beta);
 
 		EllipseBilliard* clone() const { return new EllipseBilliard(*this); }
 
 	protected:
-        double nextPosition() const;
-        double nextDirection() const;
+        double nextPosition();
+        double nextDirection();
 
 		double a, b, e;
+        double currentX, currentY;
+        double normalX, normalY;
 };
 
 #endif

@@ -36,7 +36,8 @@ class AbstractBilliard {
                 direction2incidence(currentAlpha, currentTheta));
         }
 
-        void setPositionAndIncidence(const double theta, const double beta) {
+        virtual void setPositionAndIncidence(const double theta,
+                                             const double beta) {
             currentTheta = wrapAngle(theta);
             currentAlpha = incidence2direction(beta, theta);
         }
@@ -57,13 +58,11 @@ class AbstractBilliard {
 
     protected:
         AbstractBilliard();
-        virtual double nextPosition()
-           const {
+        virtual double nextPosition() {
                assert(false);
            return 0;
         }
-        virtual double nextDirection()
-           const {
+        virtual double nextDirection() {
                assert(false);
            return 0;
         }

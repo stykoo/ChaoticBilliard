@@ -16,8 +16,8 @@ class CircleBilliard : public AbstractBilliard {
 		CircleBilliard* clone() const { return new CircleBilliard(*this); }
 
 	protected:
-        double nextPosition() const;
-        double nextDirection() const;
+        double nextPosition();
+        double nextDirection();
 
 		const double r;
 };

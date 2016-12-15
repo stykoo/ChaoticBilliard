@@ -13,7 +13,7 @@ class WidgetParametersSpace : public QWidget {
     Q_OBJECT
 
 	public:
-		WidgetParametersSpace(const int pointsize=3,
+		WidgetParametersSpace(const int pointsize=2,
             const double xMin = -M_PI, const double xMax = M_PI,
             const double yMin = -M_PI/2., const double yMax = +M_PI/2.,
             QWidget *parent = 0);

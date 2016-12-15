@@ -6,6 +6,11 @@ EllipseBilliard::EllipseBilliard(const double e, const double theta,
                                  const double alpha, const double a) :
         AbstractBilliard(theta, alpha), a(a), e(e) {
     b = a * std::sqrt(1 - e*e);
+
+    currentX = std::cos(theta);
+    currentY = std::sin(theta);
+    normalX = -std::sin(alpha);
+    normalY = std::cos(alpha);
 }
 
 double EllipseBilliard::rho(const double theta) const {
@@ -24,15 +29,24 @@ std::tuple<double, double> EllipseBilliard::xy(const double theta) const {
     return std::make_tuple(a * std::cos(theta), b * std::sin(theta));
 }
 
-double EllipseBilliard::nextPosition() const {
+void EllipseBilliard::setPositionAndIncidence(const double theta,
+                                              const double beta) {
+    currentTheta = wrapAngle(theta);
+    currentAlpha = incidence2direction(beta, theta);
+    currentX = std::cos(currentTheta);
+    currentY = std::sin(currentTheta);
+    normalX = -std::sin(currentAlpha);
+    normalY = std::cos(currentAlpha);
+}
+
+double EllipseBilliard::nextPosition() {
     double s1 = 1. / (a*a);
     double s2 = 1. / (b*b);
-    double x0, y0;
-    std::tie(x0, y0) = getXY();
+    double x0 = currentX, y0 = currentY;
 
     // ux + vy + w = 0
-    double u = -std::sin(currentAlpha);
-    double v = std::cos(currentAlpha);
+    double u = normalX;
+    double v = normalY;
     double w = - (u*x0 + v*y0);
 
     // If v is small, we swap the roles of x and y to avoid division by zero
@@ -68,17 +82,20 @@ double EllipseBilliard::nextPosition() const {
         std::swap(xNext, yNext);
     }
 
+    currentX = xNext;
+    currentY = yNext;
+
     double thetaNext = std::atan2(yNext, xNext);
     return thetaNext;
 }
 
-double EllipseBilliard::nextDirection() const {
-    double ux = std::cos(currentAlpha);
-    double uy = std::sin(currentAlpha);
+double EllipseBilliard::nextDirection() {
+    double ux = normalY;
+    double uy = -normalX;
 
     // Normal vector to the ellipse
-    double nx = -a * std::sin(currentTheta);
-    double ny = b * std::cos(currentTheta);
+    double nx = -a * currentY / b;
+    double ny = b * currentX / a;
     double nNorm = nx*nx + ny*ny;
     nx /= nNorm;
     ny /= nNorm;
@@ -87,5 +104,7 @@ double EllipseBilliard::nextDirection() const {
 
     double dx = (ux*nx + uy*ny)*nx - (ux*tx + uy*ty)*tx;
     double dy = (ux*nx + uy*ny)*ny - (ux*tx + uy*ty)*ty;
+    normalX = -dy;
+    normalY = dx;
     return std::atan2(dy, dx);
 }
