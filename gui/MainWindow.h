@@ -7,7 +7,7 @@
 
 #define DEFAULT_ANGLE 0.
 #define DEFAULT_INCIDENCE 45.
-#define DEFAULT_SPEED 2.
+#define DEFAULT_SPEED 2
 
 class WidgetPhysicalSpace;
 class WidgetParametersSpace;
@@ -20,6 +20,7 @@ class MainWindow : public QWidget
 		MainWindow();
 
     public slots:
+        void setParameters(double theta, double beta);
         void reloadParameters();
         void resetBilliard();
         void updateSpeed();

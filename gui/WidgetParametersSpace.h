@@ -25,7 +25,11 @@ class WidgetParametersSpace : public QWidget {
         void setColor(const QColor &c);
         void clearImage();
 
+    signals:
+        void clicked(double theta, double beta);
+
 	protected:
+        void mouseReleaseEvent(QMouseEvent *event);
 		void paintEvent(QPaintEvent *event);
 
 	private:

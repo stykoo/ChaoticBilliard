@@ -49,6 +49,14 @@ MainWindow::MainWindow() {
     setWindowTitle(tr("Billiard"));
     connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
     connect(nextTimer, SIGNAL(timeout()), this, SLOT(forward()));
+    connect(widgetParams, SIGNAL(clicked(double, double)),
+            this, SLOT(setParameters(double, double)));
+}
+
+void MainWindow::setParameters(double theta, double beta) {
+    angleSpinBox->setValue(180 * theta / M_PI);
+    incidenceSpinBox->setValue(180 * beta / M_PI);
+    reloadParameters();
 }
 
 void MainWindow::reloadParameters() {

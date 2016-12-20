@@ -11,6 +11,8 @@ WidgetParametersSpace::WidgetParametersSpace(const int pointsize,
                         QImage::Format_RGB32);
     clearImage();
     color.setHsv(0, 255, 224);
+
+    setCursor(Qt::CrossCursor);
 }
 
 WidgetParametersSpace::~WidgetParametersSpace() {
@@ -53,8 +55,18 @@ void WidgetParametersSpace::clearImage() {
 	pixels->fill(Qt::white);
 }
 
-void WidgetParametersSpace::paintEvent(QPaintEvent *event)
-{
+void WidgetParametersSpace::mouseReleaseEvent(QMouseEvent *event) {
+    int x = event->pos().x() - (width()-PARAMSPACE_WIDTH)/2.;
+    int y = event->pos().y() - (height()-PARAMSPACE_HEIGHT)/2.;
+
+    if (x >= 0 && y >= 0 && x < PARAMSPACE_WIDTH && y < PARAMSPACE_HEIGHT) {
+        double theta = xMin + x * (xMax - xMin) / PARAMSPACE_WIDTH;
+        double beta = yMax - y * (yMax - yMin) / PARAMSPACE_HEIGHT;
+        emit clicked(theta, beta);
+    }
+}
+
+void WidgetParametersSpace::paintEvent(QPaintEvent *event) {
 	(void) event;  // Unused parameter
     QPainter painter(this);
 	painter.drawImage(QPoint((width()-PARAMSPACE_WIDTH)/2.,
