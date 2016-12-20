@@ -1,8 +1,8 @@
 #ifndef WIDGET_PARAMETERS_SPACE
 #define WIDGET_PARAMETERS_SPACE
 
-#define PARAMSPACE_WIDTH 600
-#define PARAMSPACE_HEIGHT 600
+#define PARAMSPACE_WIDTH 599
+#define PARAMSPACE_HEIGHT 599
 
 #include <QtWidgets>
 #include <tuple>

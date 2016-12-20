@@ -130,12 +130,17 @@ void MainWindow::pause() {
 }
 
 void MainWindow::forward() {
-    billiard->updatePositionAndDirection();
-    widgetPhys->addPoint(billiard->getTheta());
-    widgetParams->addPoint(billiard->getPhaseCoos());
+    try {
+        billiard->updatePositionAndDirection();
+        widgetPhys->addPoint(billiard->getTheta());
+        widgetParams->addPoint(billiard->getPhaseCoos());
 
-    ++iter;
-    updateCurrentStateLabel();
+        ++iter;
+        updateCurrentStateLabel();
+    } catch (std::exception &e) {
+        QMessageBox::critical(this, tr("Error"), e.what());
+        pause();
+    }
 }
 
 void MainWindow::manageShapeGroup(int selectedIndex) {
@@ -216,6 +221,7 @@ void MainWindow::createParametersGroup() {
     angleSpinBox->setSingleStep(10.);
     angleSpinBox->setValue(DEFAULT_ANGLE);
     angleSpinBox->setSuffix("°");
+    angleSpinBox->setDecimals(5);
     angleLabel = new QLabel(tr("Initial angle:"));
     angleLabel->setBuddy(angleSpinBox);
 
@@ -224,6 +230,7 @@ void MainWindow::createParametersGroup() {
     incidenceSpinBox->setSingleStep(5.);
     incidenceSpinBox->setValue(DEFAULT_INCIDENCE);
     incidenceSpinBox->setSuffix("°");
+    incidenceSpinBox->setDecimals(5);
     incidenceLabel = new QLabel(tr("Initial incidence angle:"));
     incidenceLabel->setBuddy(incidenceSpinBox);
 
