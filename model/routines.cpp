@@ -18,7 +18,8 @@ void solveSecondOrderEq(const double a, const double b, const double c,
                        double &sol1, double &sol2) {
     double d = b*b - 4*a*c;
     if(d < 0) {
-        throw std::domain_error("Second order equation has no real solution.");
+        throw std::runtime_error(
+            "Second order equation has no real solution.");
     }
     // Trick for numerical stability
     double tmp = -0.5 * (b + sign(b) * std::sqrt(d));
@@ -28,7 +29,7 @@ void solveSecondOrderEq(const double a, const double b, const double c,
 
 double brentSolver(std::function<double(double)> f, double a, double b,
                    size_t bits, size_t maxiter){
-    bits = std::min(sizeof(double) / 2, bits);
+    bits = std::min(4 * sizeof(double), bits);
     double tol = std::ldexp(1., 1-bits);
 
     double fa = f(a), fb = f(b);
@@ -64,7 +65,7 @@ double brentSolver(std::function<double(double)> f, double a, double b,
         double t3 = (mflag) ? std::abs(b - c) : std::abs(c - d);
         if (s < t1 || s > t2 || t3 <= 2. * std::abs(s - b) || t3 <= tol) {
             // Bissection method
-            s = a + (a - b) / 2.;
+            s = a + (b - a) / 2.;
             mflag = true;
         } else {
             mflag = false;
