@@ -16,6 +16,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*
+ * ChaoticBilliard
+ * AbstractBilliard.cpp
+ *
+ * Author: Alexis Poncet
+ * Email: alexis.poncet@ens.fr
+ * Version: 1.0
+ *
+ * Contain the implementation of the functions for an abstract billiard.
+ */
 
 #include <cmath>
 #include <stdexcept>

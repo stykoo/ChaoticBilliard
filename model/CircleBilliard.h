@@ -16,6 +16,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*
+ * ChaoticBilliard
+ * CircleBilliard.h
+ *
+ * Author: Alexis Poncet
+ * Email: alexis.poncet@ens.fr
+ * Version: 1.0
+ *
+ * Define the class for a circular billiard.
+ */
 
 #ifndef CIRCLE_BILLIARD_H
 #define CIRCLE_BILLIARD_H

@@ -16,6 +16,18 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*
+ * ChaoticBilliard
+ * AbstractBilliard.h
+ *
+ * Author: Alexis Poncet
+ * Email: alexis.poncet@ens.fr
+ * Version: 1.0
+ *
+ * Define the class for an abstract billiard.
+ * AbstractBilliard should be inherited from and some functions should be
+ * implemented in the daughter classes to make a real billiard.
+ */
 
 #ifndef ABSTRACT_BILLIARD_H
 #define ABSTRACT_BILLIARD_H
