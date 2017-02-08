@@ -5,6 +5,7 @@
 #include <string>
 #include <tuple>
 #include <cassert>
+#include <stdexcept>
 #include "routines.h"
 
 // Abstract class for shape function
@@ -44,7 +45,13 @@ class AbstractBilliard {
 
         void updatePositionAndDirection() {
             currentTheta = nextPosition();     
+            if (std::isnan(currentTheta)) {
+                throw std::runtime_error("Encountered NaN value.");
+            }
             currentAlpha = nextDirection();     
+            if (std::isnan(currentAlpha)) {
+                throw std::runtime_error("Encountered NaN value.");
+            }
         }
 
         static double incidence2direction(const double beta,
@@ -59,13 +66,26 @@ class AbstractBilliard {
     protected:
         AbstractBilliard();
         virtual double nextPosition() {
-               assert(false);
-           return 0;
+            const double currentX = rho(currentTheta) * std::cos(currentTheta);
+            const double currentY = rho(currentTheta) * std::sin(currentTheta);
+
+            // Equation of the line: ux+xy+w=0
+            const double u = -std::sin(currentAlpha);
+            const double v = std::cos(currentAlpha);
+            const double w = - (u*currentX + v*currentY);
+
+            auto fun = [&] (const double &t) {
+                return rho(t) * (u * std::cos(t) + v * std::sin(t)) + w;
+            };
+
+            const double eps = 1e-6;
+            double nextTheta = bisectionSolver(fun, currentTheta + eps,
+                                               currentTheta + 2*M_PI - eps);
+
+            return wrapAngle(nextTheta);
         }
-        virtual double nextDirection() {
-               assert(false);
-           return 0;
-        }
+
+        virtual double nextDirection() = 0;
 
         double currentTheta, currentAlpha;
 };

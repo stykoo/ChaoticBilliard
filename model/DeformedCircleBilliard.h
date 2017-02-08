@@ -18,6 +18,7 @@ class DeformedCircleBilliard : public AbstractBilliard {
         }
 
 	protected:
+        double nextDirection();
 		const double eps, r;
 };
 

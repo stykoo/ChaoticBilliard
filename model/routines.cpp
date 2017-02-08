@@ -27,6 +27,41 @@ void solveSecondOrderEq(const double a, const double b, const double c,
     sol2 = c / tmp;
 }
 
+double bisectionSolver(std::function<double(double)> f, double a, double b,
+                       size_t bits, size_t maxiter) {
+    bits = std::min(4 * sizeof(double), bits);
+    double tol = std::ldexp(1., 1-bits);
+
+    double fa = f(a), fb = f(b);
+
+    if (fa * fb >= 0) {
+        throw std::runtime_error("Could not use bisection method.");
+    }
+
+    if (a > b) {
+        std::swap(a, b);
+    }
+
+    double s = b, fs = fb;
+    size_t i = maxiter;
+
+    while (i-- && fs != 0. && b - a > tol) {
+        s = a + (b - a) / 2.;
+        fs = f(s);
+        if(fs * fb >= 0) {
+            b = s;
+            fb = fs;
+        } else {
+            a = s;
+            fa = fs;
+        }
+    }
+
+    return s;
+}
+
+
+/*
 double brentSolver(std::function<double(double)> f, double a, double b,
                    size_t bits, size_t maxiter){
     bits = std::min(4 * sizeof(double), bits);
@@ -92,3 +127,4 @@ double brentSolver(std::function<double(double)> f, double a, double b,
 
     return b;
 }
+*/
