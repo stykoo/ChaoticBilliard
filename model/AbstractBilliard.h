@@ -35,16 +35,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <tuple>
 
-// Abstract class for shape function
+// Abstract class for billiard
+// theta = angle of the position, rho = radius,
+// x (resp y) = 1st (resp 2nd) coordinate
+// alpha = angle of the direction with respect to the horizontal
+// beta = angle of incidence on the billiard
 class AbstractBilliard {
 	public:
         AbstractBilliard(const double theta, const double alpha);
 		virtual ~AbstractBilliard() {};
 
-		virtual double rho(const double theta) const = 0;
-		virtual double rhoMax() const = 0;
-        virtual std::string string() const = 0;
-		virtual AbstractBilliard* clone() const = 0;
+        // To be implemented in the daughter classes
+		virtual double rho(const double theta) const = 0;  // radius(angle)
+		virtual double rhoMax() const = 0;  // Maximum radius
+        virtual std::string string() const = 0;  // Name of the billiard
+		virtual AbstractBilliard* clone() const = 0;  // Clone the instance
 
         virtual std::tuple<double, double> xy(const double theta) const;
         double getTheta() const;
@@ -62,6 +67,8 @@ class AbstractBilliard {
 
     protected:
         AbstractBilliard();
+        // We provide a generic implementation for the next position
+        // but not for the next direction.
         virtual double nextPosition();
         virtual double nextDirection() = 0;
 

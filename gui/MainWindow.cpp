@@ -32,13 +32,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "MainWindow.h"
 #include "../model/Billiards.h"
 
+// Construct the main window with default parameters.
 MainWindow::MainWindow() {
 	qsrand(QTime::currentTime().msec());
 
+    // Defaut billiard.
 	billiard = std::make_shared<CircleBilliard>(
         DEFAULT_ANGLE * M_PI / 180.,
         AbstractBilliard::incidence2direction(DEFAULT_INCIDENCE * M_PI / 180.,
                                               DEFAULT_ANGLE * M_PI / 180.));
+
     QColor color = QColor::fromHsv(qrand() % 360, 255, 224);
 	widgetPhys = new WidgetPhysicalSpace(billiard);
     widgetPhys->setColor(color);
@@ -82,12 +85,14 @@ MainWindow::MainWindow() {
             this, SLOT(setParameters(double, double)));
 }
 
+// Set the angles of position and incidence.
 void MainWindow::setParameters(double theta, double beta) {
     angleSpinBox->setValue(180 * theta / M_PI);
     incidenceSpinBox->setValue(180 * beta / M_PI);
     reloadParameters();
 }
 
+// Reload the parameters and reinitialize what is needed.
 void MainWindow::reloadParameters() {
     double theta = angleSpinBox->value() * M_PI / 180.;
     double beta = incidenceSpinBox->value() * M_PI / 180.;
@@ -105,6 +110,7 @@ void MainWindow::reloadParameters() {
     pause();
 }
 
+// Change the billiard.
 void MainWindow::resetBilliard() {
     double theta = angleSpinBox->value() * M_PI / 180.;
     double beta = incidenceSpinBox->value() * M_PI / 180.;
@@ -141,23 +147,27 @@ void MainWindow::resetBilliard() {
     pause();
 }
 
+// Change the speed of automatic trajectory.
 void MainWindow::updateSpeed() {
     updateSpeedLabel();
     nextTimer->setInterval(1000 / speedSlider->value());
 }
 
+// Start automatic trajectory with timer.
 void MainWindow::play() {
     playAction->setDisabled(true);
     pauseAction->setDisabled(false);
     nextTimer->start();
 }
 
+// Pause automatic trajectory.
 void MainWindow::pause() {
     playAction->setDisabled(false);
     pauseAction->setDisabled(true);
     nextTimer->stop();
 }
 
+// Do one iteration.
 void MainWindow::forward() {
     try {
         billiard->updatePositionAndDirection();
@@ -172,6 +182,7 @@ void MainWindow::forward() {
     }
 }
 
+// Enforce defaut options for shape group.
 void MainWindow::manageShapeGroup(int selectedIndex) {
     if (selectedIndex == 0) {
         shapeEllipseLabel->hide();
@@ -191,6 +202,7 @@ void MainWindow::manageShapeGroup(int selectedIndex) {
     }
 }
 
+// Create group for toolbar.
 void MainWindow::createToolbarGroup() {
     toolbar = new QToolBar;
     playAction = toolbar->addAction(
@@ -242,6 +254,7 @@ void MainWindow::createToolbarGroup() {
     connect(speedSlider, SIGNAL(valueChanged(int)), this, SLOT(updateSpeed()));
 }
 
+// Create group for change of parameters.
 void MainWindow::createParametersGroup() {
     parametersGroup = new QGroupBox(tr("Parameters"));
 
@@ -278,6 +291,7 @@ void MainWindow::createParametersGroup() {
             SLOT(reloadParameters()));
 }
 
+// Create group for change of shape.
 void MainWindow::createShapeGroup() {
     shapeGroup = new QGroupBox(tr("Shape"));
 
@@ -327,6 +341,7 @@ void MainWindow::createShapeGroup() {
     connect(shapeButton, SIGNAL(clicked()), this, SLOT(resetBilliard()));
 }
 
+// Update the label giving the speed.
 void MainWindow::updateSpeedLabel() {
     QString text;
     QTextStream stream(&text);
@@ -336,6 +351,7 @@ void MainWindow::updateSpeedLabel() {
     speedLabel->setText(text);
 }
 
+// Update the label giving information on the situation.
 void MainWindow::updateCurrentStateLabel() {
     QString text;
     QTextStream stream(&text);

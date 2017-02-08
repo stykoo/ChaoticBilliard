@@ -96,9 +96,9 @@ class MainWindow : public QWidget
 
 		QPushButton *quitButton;
 
-        QTimer *nextTimer;
-        std::shared_ptr<AbstractBilliard> billiard;
-        unsigned int iter = 0;
+        QTimer *nextTimer;  // Timer for automatic evolution
+        std::shared_ptr<AbstractBilliard> billiard;  // Billiard
+        unsigned int iter = 0;  // Time iteration
 };
 
 #endif

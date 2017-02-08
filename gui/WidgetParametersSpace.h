@@ -62,11 +62,11 @@ class WidgetParametersSpace : public QWidget {
 		void paintEvent(QPaintEvent *event);
 
 	private:
-		QImage *pixels;
-        QColor color;
+		QImage *pixels;  // Image on which we draw
+        QColor color;  // Color of the current trajectory
 
-        int pointsize;
-        double xMin, xMax, yMin, yMax;
+        int pointsize;  // Size of the pen
+        double xMin, xMax, yMin, yMax;  // Coordinates of the corners
         //QList<std::tuple<double, double, QRgb> history;
 };
 

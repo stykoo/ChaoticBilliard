@@ -31,22 +31,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cmath>
 #include "DeformedCircleBilliard.h"
 
+// Construct deformed circular billiard.
+// eps is the deformation.
 DeformedCircleBilliard::DeformedCircleBilliard(
         const double eps, const double theta, const double alpha, double r) :
     AbstractBilliard(theta, alpha), eps(eps), r(r) {}
 
+// Return the radius given the angle.
 double DeformedCircleBilliard::rho(const double theta) const {
 	return r + eps*std::cos(theta);
 }
 
+// Return the maximum radius.
 double DeformedCircleBilliard::rhoMax() const {
 	return r + eps;
 }
 
+// Return name and deformation.
 std::string DeformedCircleBilliard::string() const {
     return "Deformed circle (eps="+std::to_string(eps)+")";
 }
 
+// Return the next angle of direction taking into account the current angles
+// of position and direction.
+// This is done by a decomposition in the right basis.
 double DeformedCircleBilliard::nextDirection() {
     // Vector corresponding to the current direction
     double ux = -std::cos(currentAlpha);

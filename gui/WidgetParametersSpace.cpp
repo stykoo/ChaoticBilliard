@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "WidgetParametersSpace.h"
 
+// Construct the widget for parameters' space.
 WidgetParametersSpace::WidgetParametersSpace(const int pointsize,
         const double xMin, const double xMax,
         const double yMin, const double yMax,
@@ -44,20 +45,24 @@ WidgetParametersSpace::WidgetParametersSpace(const int pointsize,
     setCursor(Qt::CrossCursor);
 }
 
+// Delete the widget by deleting the image.
 WidgetParametersSpace::~WidgetParametersSpace() {
 	delete pixels;
 }
 
+// Return the minimum size of the widget.
 QSize WidgetParametersSpace::minimumSizeHint() const
 {
 	return QSize(PARAMSPACE_WIDTH, PARAMSPACE_HEIGHT);
 }
 
+// Return the advised size of the widget.
 QSize WidgetParametersSpace::sizeHint() const
 {
 	return minimumSizeHint();
 }
 
+// Add a point on the image.
 void WidgetParametersSpace::addPoint(const std::tuple<double, double> coos) {
     int x_screen = PARAMSPACE_WIDTH * \
         (std::get<0>(coos) - xMin) / (xMax - xMin);
@@ -76,14 +81,17 @@ void WidgetParametersSpace::addPoint(const std::tuple<double, double> coos) {
     repaint();
 }
 
+// Set the color of the pen.
 void WidgetParametersSpace::setColor(const QColor &c) {
     color = c;
 }
 
+// Clear the image.
 void WidgetParametersSpace::clearImage() {
 	pixels->fill(Qt::white);
 }
 
+// Emit a signal 'clicked' when there is a click.
 void WidgetParametersSpace::mouseReleaseEvent(QMouseEvent *event) {
     int x = event->pos().x() - (width()-PARAMSPACE_WIDTH)/2.;
     int y = event->pos().y() - (height()-PARAMSPACE_HEIGHT)/2.;
@@ -95,6 +103,7 @@ void WidgetParametersSpace::mouseReleaseEvent(QMouseEvent *event) {
     }
 }
 
+// Draw the image
 void WidgetParametersSpace::paintEvent(QPaintEvent *event) {
 	(void) event;  // Unused parameter
     QPainter painter(this);

@@ -31,6 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <functional>
 
+// Return the square of a number
 inline double square(const double x) {
     return x*x;
 }

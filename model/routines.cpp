@@ -31,10 +31,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdexcept>
 #include "routines.h"
 
+// Return the sign of a number (+1 if positive, -1 if negative, 0 if null)
 int sign(const double x) {
     return (0. < x) - (x < 0.);
 }
 
+// Wrap an angle between -pi and +pi
 double wrapAngle(double angle) {
     angle -= std::floor(angle / (2. * M_PI)) * 2 * M_PI; 
     if (angle > M_PI) {
@@ -43,6 +45,7 @@ double wrapAngle(double angle) {
     return angle;
 }
 
+// Solve the equation ax^2 + bx + c = 0
 void solveSecondOrderEq(const double a, const double b, const double c,
                        double &sol1, double &sol2) {
     double d = b*b - 4*a*c;
@@ -56,6 +59,8 @@ void solveSecondOrderEq(const double a, const double b, const double c,
     sol2 = c / tmp;
 }
 
+// Solve f(x) = 0 for x between a and b, knowing that f(a)f(b) < 0
+// Use the bisection method
 double bisectionSolver(std::function<double(double)> f, double a, double b,
                        size_t bits, size_t maxiter) {
     bits = std::min(8 * sizeof(double), bits);

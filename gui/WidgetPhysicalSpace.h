@@ -55,10 +55,10 @@ class WidgetPhysicalSpace : public QWidget {
 		void paintEvent(QPaintEvent *event);
 
 	private:
-        std::shared_ptr<AbstractBilliard> billiard;
-        QPolygonF *stroke;
-        QColor color; 
-		QList<QPointF> pointHistory;
+        std::shared_ptr<AbstractBilliard> billiard;  // Billiard
+        QPolygonF *stroke;  // Lines representing the edge of the billiard
+        QColor color;  // Color of the current trajectory
+		QList<QPointF> pointHistory;  // All the point we went through
 };
 
 #endif

@@ -47,6 +47,7 @@ class DeformedCircleBilliard : public AbstractBilliard {
         }
 
 	protected:
+        // nextPosition() is implemented in AbstractBilliard.cpp
         double nextDirection();
 		const double eps, r;
 };

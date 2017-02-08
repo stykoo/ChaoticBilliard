@@ -32,34 +32,41 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "routines.h"
 #include "AbstractBilliard.h"
 
+// Construct the abstract billiard.
 AbstractBilliard::AbstractBilliard(const double theta, const double alpha) :
     currentTheta(theta), currentAlpha(alpha) {
 }
 
+// Return the coordinates given an angle.
 std::tuple<double, double> AbstractBilliard::xy(const double theta) const {
     double rd = rho(theta);
     return std::make_tuple(rd * std::cos(theta), rd * std::sin(theta));
 }
 
+// Return the current angle of position.
 double AbstractBilliard::getTheta() const {
     return currentTheta;
 }
 
+// Return the current coordinates.
 std::tuple<double, double> AbstractBilliard::getXY() const {
     return xy(currentTheta);
 }
 
+// Return the current angles of position and incidence.
 std::tuple<double, double> AbstractBilliard::getPhaseCoos() const {
     return std::make_tuple(currentTheta,
         direction2incidence(currentAlpha, currentTheta));
 }
 
+// Set the angles of position and incidence.
 void AbstractBilliard::setPositionAndIncidence(const double theta,
                                                const double beta) {
     currentTheta = wrapAngle(theta);
     currentAlpha = incidence2direction(beta, theta);
 }
 
+// Make a move on the billiard: update the angles of position and direction.
 void AbstractBilliard::updatePositionAndDirection() {
     currentTheta = nextPosition();     
     if (std::isnan(currentTheta)) {
@@ -71,15 +78,20 @@ void AbstractBilliard::updatePositionAndDirection() {
     }
 }
 
+// Return angle of direction given angles of incidence and position.
 double AbstractBilliard::incidence2direction(const double beta,
                                              const double theta) {
     return wrapAngle(M_PI - beta + theta);
 }
+
+// Return angle of incidence given angles of direction and position.
 double AbstractBilliard::direction2incidence(const double alpha,
                                              const double theta) {
     return wrapAngle(M_PI - alpha + theta);
 }
 
+// Return the next angle of position.
+// Solve for the intersection of the shape rho(theta) and a line.
 double AbstractBilliard::nextPosition() {
     const double currentX = rho(currentTheta) * std::cos(currentTheta);
     const double currentY = rho(currentTheta) * std::sin(currentTheta);

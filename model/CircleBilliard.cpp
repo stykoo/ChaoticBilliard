@@ -31,27 +31,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "CircleBilliard.h"
 #include "routines.h"
 
+// Construct circular billiard.
 CircleBilliard::CircleBilliard(const double theta, const double alpha,
                                const double r) :
-    AbstractBilliard(theta, alpha), r(r) {}
+    AbstractBilliard(theta, alpha), r(r) {
+}
 
+// Return constant radius.
 double CircleBilliard::rho(const double theta) const {
-	(void) theta;
+	(void) theta;  // Unused parameter
 	return r;
 }
 
+// Return maximum radius = radius.
 double CircleBilliard::rhoMax() const {
 	return r;
 }
 
+// Return the name of the billiard.
 std::string CircleBilliard::string() const {
     return "Circle";
 }
 
+// Return the next angle of position taking into account the current angles
+// of position and direction.
 double CircleBilliard::nextPosition() {
     return wrapAngle(-currentTheta + 2 * currentAlpha - M_PI);
 }
 
+// Return the next angle of direction taking into account the current angles
+// of position and direction.
 double CircleBilliard::nextDirection() {
     return wrapAngle(2 * currentTheta - currentAlpha);
 }

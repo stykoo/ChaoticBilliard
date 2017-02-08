@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "WidgetPhysicalSpace.h"
 
+// Construct the widget for physical space.
 WidgetPhysicalSpace::WidgetPhysicalSpace(std::shared_ptr<AbstractBilliard> bil,
                                          QWidget *parent) : QWidget(parent) {
     setBackgroundRole(QPalette::Base);
@@ -50,23 +51,28 @@ WidgetPhysicalSpace::WidgetPhysicalSpace(std::shared_ptr<AbstractBilliard> bil,
     color.setHsv(0, 255, 224);
 }
 
+// Delete the widget by deleting the shape.
 WidgetPhysicalSpace::~WidgetPhysicalSpace() {
     delete stroke;
 }
 
+// Return the minimum size of the widget.
 QSize WidgetPhysicalSpace::minimumSizeHint() const {
 	return QSize(PHYSPACE_SIZE, PHYSPACE_SIZE);
 }
 
+// Return the advised size of the widget.
 QSize WidgetPhysicalSpace::sizeHint() const {
     return minimumSizeHint();
 }
 
+// Clear the history.
 void WidgetPhysicalSpace::clearHistory() {
     pointHistory.clear();
     repaint();
 }
 
+// Change the billiard.
 void WidgetPhysicalSpace::setBilliard(std::shared_ptr<AbstractBilliard> bil) {
 	billiard.reset();
     delete stroke;
@@ -87,6 +93,7 @@ void WidgetPhysicalSpace::setBilliard(std::shared_ptr<AbstractBilliard> bil) {
     repaint();
 }
 
+// Add a point to the trajectory.
 void WidgetPhysicalSpace::addPoint(const double theta) {
 	const double rad = PHYSPACE_SIZE / (2. * billiard->rhoMax());
     double x, y;
@@ -96,10 +103,12 @@ void WidgetPhysicalSpace::addPoint(const double theta) {
     repaint();
 }
 
+// Set the color of the pen.
 void WidgetPhysicalSpace::setColor(const QColor &c) {
     color = c;
 }
 
+// Draw the billiard and the trajectory.
 void WidgetPhysicalSpace::paintEvent(QPaintEvent *event) {
 	(void) event; // Unused parameter
     QPainter painter(this);

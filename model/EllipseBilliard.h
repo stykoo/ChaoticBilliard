@@ -51,8 +51,9 @@ class EllipseBilliard : public AbstractBilliard {
         double nextDirection();
 
 		double a, b, e;
-        double currentX, currentY;
-        double normalX, normalY;
+        // Store these values for greater numerical accuracy.
+        double currentX, currentY;  // Current coordinates
+        double normalX, normalY;  // Current coordinates of the normal vector
 };
 
 #endif

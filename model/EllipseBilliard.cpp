@@ -31,6 +31,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "EllipseBilliard.h"
 #include "routines.h"
 
+// Construct elliptic billiard.
+// a (resp. b) = semi major (resp. minor) axis
+// e = excentricity
 EllipseBilliard::EllipseBilliard(const double e, const double theta,
                                  const double alpha, const double a) :
         AbstractBilliard(theta, alpha), a(a), e(e) {
@@ -42,22 +45,29 @@ EllipseBilliard::EllipseBilliard(const double e, const double theta,
     normalY = std::cos(alpha);
 }
 
+// Return the radius according to the polar equation of the ellipse.
 double EllipseBilliard::rho(const double theta) const {
-	return a * b / std::sqrt(square(b * std::cos(theta)) + square(a * std::sin(theta)));
+	return a * b / std::sqrt(square(b * std::cos(theta)) \
+           + square(a * std::sin(theta)));
 }
 
+// Return maximum radius = semi major axis.
 double EllipseBilliard::rhoMax() const {
 	return a;
 }
 
+// Return name and excentricity.
 std::string EllipseBilliard::string() const {
     return "Ellipse (e="+std::to_string(e)+")";
 }
 
+// Re-implement the expression of the coordinates for greater numerical
+// accuracy.
 std::tuple<double, double> EllipseBilliard::xy(const double theta) const {
     return std::make_tuple(a * std::cos(theta), b * std::sin(theta));
 }
 
+// Re-implement this function because of the new variables.
 void EllipseBilliard::setPositionAndIncidence(const double theta,
                                               const double beta) {
     currentTheta = wrapAngle(theta);
@@ -68,6 +78,8 @@ void EllipseBilliard::setPositionAndIncidence(const double theta,
     normalY = std::cos(currentAlpha);
 }
 
+// Return the next angle of position taking into account the current angles
+// of position and direction. This is done by solving a second order equation.
 double EllipseBilliard::nextPosition() {
     double s1 = 1. / (a*a);
     double s2 = 1. / (b*b);
@@ -118,6 +130,9 @@ double EllipseBilliard::nextPosition() {
     return thetaNext;
 }
 
+// Return the next angle of direction taking into account the current angles
+// of position and direction.
+// This is done by a decomposition in the right basis.
 double EllipseBilliard::nextDirection() {
     double ux = normalY;
     double uy = -normalX;
