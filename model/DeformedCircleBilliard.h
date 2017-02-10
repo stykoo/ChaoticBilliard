@@ -47,8 +47,9 @@ class DeformedCircleBilliard : public AbstractBilliard {
         }
 
 	protected:
+        Vector2d currentNormalVector() const;
         // updatePosition() is implemented in AbstractBilliard.cpp
-        void updateDirection();
+        // updateDirection() is implemented in AbstractBilliard.cpp
 
 		const double eps, r;
 };

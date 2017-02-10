@@ -113,3 +113,23 @@ void AbstractBilliard::updatePosition() {
     nextTheta = wrapAngle(nextTheta);
     currentPosition.setPolarCoordinates(rho(nextTheta), nextTheta);
 }
+
+// Update the angle of direction taking into account the current angles
+// of position and direction.
+// This is done by a decomposition in the right basis.
+void AbstractBilliard::updateDirection() {
+    double ux = currentDirection.x();
+    double uy = currentDirection.y();
+
+    // Normal vector to the curve
+    Vector2d nVec = currentNormalVector();
+    double nx = nVec.x();
+    double ny = nVec.y();
+    // Tangent vector to the curve
+    double tx = -ny, ty = nx;
+
+    double dx = (ux*nx + uy*ny)*nx - (ux*tx + uy*ty)*tx;
+    double dy = (ux*nx + uy*ny)*ny - (ux*tx + uy*ty)*ty;
+    currentDirection.setCartesianCoordinates(dx, dy);
+    currentDirection.normalize();
+}

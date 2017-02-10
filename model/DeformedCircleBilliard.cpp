@@ -54,27 +54,13 @@ std::string DeformedCircleBilliard::string() const {
     return "Deformed circle (eps="+std::to_string(eps)+")";
 }
 
-// Update the angle of direction taking into account the current angles
-// of position and direction.
-// This is done by a decomposition in the right basis.
-void DeformedCircleBilliard::updateDirection() {
-    // Vector corresponding to the current direction
-    double ux = -currentDirection.x();
-    double uy = -currentDirection.y();
+// Return the normal vector to the curve at the current point.
+Vector2d DeformedCircleBilliard::currentNormalVector() const {
+    const double t = currentPosition.theta();
 
-    // Normal vector to the billiard
-    double theta = currentPosition.theta();
-    double nx = std::cos(theta) + eps * std::cos(2. * theta); 
-    double ny = std::sin(theta) + eps * std::sin(2. * theta); 
-    double nNorm = nx*nx + ny*ny;
-    nx /= nNorm;
-    ny /= nNorm;
-    // Tangent vector to the billiard
-    double tx = -ny, ty = nx;
-
-    double dx = (ux*nx + uy*ny)*nx - (ux*tx + uy*ty)*tx;
-    double dy = (ux*nx + uy*ny)*ny - (ux*tx + uy*ty)*ty;
-
-    currentDirection.setCartesianCoordinates(dx, dy);
-    currentDirection.normalize();
+    Vector2d nVec;
+    nVec.setCartesianCoordinates(std::cos(t) + eps * std::cos(2.*t),
+                                 std::sin(t) + eps * std::sin(2.*t));
+    nVec.normalize();
+    return nVec;
 }

@@ -45,6 +45,7 @@ class CircleBilliard : public AbstractBilliard {
 		CircleBilliard* clone() const { return new CircleBilliard(*this); }
 
 	protected:
+        Vector2d currentNormalVector() const;
         void updatePosition();
         void updateDirection();
 

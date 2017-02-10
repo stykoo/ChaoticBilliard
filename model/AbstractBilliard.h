@@ -68,12 +68,13 @@ class AbstractBilliard {
 
     protected:
         AbstractBilliard();
+        
+        virtual Vector2d currentNormalVector() const = 0;
         // We provide a generic implementation for the next position
-        // but not for the next direction.
+        // and the next direction.
         virtual void updatePosition();
-        virtual void updateDirection() = 0;
+        virtual void updateDirection();
 
-        //double currentTheta, currentAlpha;
         Vector2d currentPosition, currentDirection;
 };
 

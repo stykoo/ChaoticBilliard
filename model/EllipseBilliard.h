@@ -46,8 +46,9 @@ class EllipseBilliard : public AbstractBilliard {
 		EllipseBilliard* clone() const { return new EllipseBilliard(*this); }
 
 	protected:
+        Vector2d currentNormalVector() const;
         void updatePosition();
-        void updateDirection();
+        // updateDirection() is implemented in AbstractBilliard.cpp
 
 		double a, b, e;
 };

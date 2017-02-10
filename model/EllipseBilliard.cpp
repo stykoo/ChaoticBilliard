@@ -63,6 +63,15 @@ std::tuple<double, double> EllipseBilliard::xy(const double theta) const {
     return std::make_tuple(a * std::cos(theta), b * std::sin(theta));
 }
 
+// Return the normal vector to the curve at the current point.
+Vector2d EllipseBilliard::currentNormalVector() const {
+    Vector2d nVec;
+    nVec.setCartesianCoordinates(-a * currentPosition.y() / b,
+                                 b * currentPosition.x() / a);
+    nVec.normalize();
+    return nVec;
+}
+
 // Update the angle of position taking into account the current angles
 // of position and direction. This is done by solving a second order equation.
 void EllipseBilliard::updatePosition() {
@@ -109,26 +118,4 @@ void EllipseBilliard::updatePosition() {
     }
 
     currentPosition.setCartesianCoordinates(xNext, yNext);
-}
-
-// Update the angle of direction taking into account the current angles
-// of position and direction.
-// This is done by a decomposition in the right basis.
-void EllipseBilliard::updateDirection() {
-    double ux = currentDirection.x();
-    double uy = currentDirection.y();
-
-    // Normal vector to the ellipse
-    double nx = -a * currentPosition.y() / b;
-    double ny = b * currentPosition.x() / a;
-    double nNorm = nx*nx + ny*ny;
-    nx /= nNorm;
-    ny /= nNorm;
-    // Tangent vector to the ellipse
-    double tx = -ny, ty = nx;
-
-    double dx = (ux*nx + uy*ny)*nx - (ux*tx + uy*ty)*tx;
-    double dy = (ux*nx + uy*ny)*ny - (ux*tx + uy*ty)*ty;
-    currentDirection.setCartesianCoordinates(dx, dy);
-    currentDirection.normalize();
 }

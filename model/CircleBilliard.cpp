@@ -54,6 +54,13 @@ std::string CircleBilliard::string() const {
     return "Circle";
 }
 
+// Return the normal vector to the curve at the current point.
+Vector2d CircleBilliard::currentNormalVector() const {
+    Vector2d nVec;
+    nVec.setPolarCoordinates(1., currentPosition.theta());
+    return nVec;
+}
+
 // Return the next angle of position taking into account the current angles
 // of position and direction.
 void CircleBilliard::updatePosition() {
