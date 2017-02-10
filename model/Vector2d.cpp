@@ -82,4 +82,6 @@ void Vector2d::setRho(const double rho0) {
         _rho = -rho0;
         _theta += M_PI;
     }
+    _x = _rho * std::cos(_theta);
+    _y = _rho * std::sin(_theta);
 }
