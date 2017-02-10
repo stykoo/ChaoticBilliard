@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 DeformedCircleBilliard::DeformedCircleBilliard(
         const double eps, const double theta, const double alpha, double r) :
         AbstractBilliard(theta, alpha), eps(eps), r(r) {
-    currentPosition.setRho(r);
+    currentPosition.setRho(rho(currentPosition.theta()));
 }
 
 // Return the radius given the angle.
