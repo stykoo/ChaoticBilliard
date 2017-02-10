@@ -34,6 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <tuple>
+#include "Vector2d.h"
 
 // Abstract class for billiard
 // theta = angle of the position, rho = radius,
@@ -69,10 +70,11 @@ class AbstractBilliard {
         AbstractBilliard();
         // We provide a generic implementation for the next position
         // but not for the next direction.
-        virtual double nextPosition();
-        virtual double nextDirection() = 0;
+        virtual void updatePosition();
+        virtual void updateDirection() = 0;
 
-        double currentTheta, currentAlpha;
+        //double currentTheta, currentAlpha;
+        Vector2d currentPosition, currentDirection;
 };
 
 #endif

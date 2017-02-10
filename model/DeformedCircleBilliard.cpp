@@ -35,7 +35,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // eps is the deformation.
 DeformedCircleBilliard::DeformedCircleBilliard(
         const double eps, const double theta, const double alpha, double r) :
-    AbstractBilliard(theta, alpha), eps(eps), r(r) {}
+        AbstractBilliard(theta, alpha), eps(eps), r(r) {
+    currentPosition.setRho(r);
+}
 
 // Return the radius given the angle.
 double DeformedCircleBilliard::rho(const double theta) const {
@@ -52,17 +54,18 @@ std::string DeformedCircleBilliard::string() const {
     return "Deformed circle (eps="+std::to_string(eps)+")";
 }
 
-// Return the next angle of direction taking into account the current angles
+// Update the angle of direction taking into account the current angles
 // of position and direction.
 // This is done by a decomposition in the right basis.
-double DeformedCircleBilliard::nextDirection() {
+void DeformedCircleBilliard::updateDirection() {
     // Vector corresponding to the current direction
-    double ux = -std::cos(currentAlpha);
-    double uy = -std::sin(currentAlpha);
+    double ux = -currentDirection.x();
+    double uy = -currentDirection.y();
 
     // Normal vector to the billiard
-    double nx = std::cos(currentTheta) + eps * std::cos(2. * currentTheta); 
-    double ny = std::sin(currentTheta) + eps * std::sin(2. * currentTheta); 
+    double theta = currentPosition.theta();
+    double nx = std::cos(theta) + eps * std::cos(2. * theta); 
+    double ny = std::sin(theta) + eps * std::sin(2. * theta); 
     double nNorm = nx*nx + ny*ny;
     nx /= nNorm;
     ny /= nNorm;
@@ -72,5 +75,6 @@ double DeformedCircleBilliard::nextDirection() {
     double dx = (ux*nx + uy*ny)*nx - (ux*tx + uy*ty)*tx;
     double dy = (ux*nx + uy*ny)*ny - (ux*tx + uy*ty)*ty;
 
-    return std::atan2(dy, dx);
+    currentDirection.setCartesianCoordinates(dx, dy);
+    currentDirection.normalize();
 }

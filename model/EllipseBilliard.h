@@ -42,18 +42,14 @@ class EllipseBilliard : public AbstractBilliard {
 		double rhoMax() const;
         std::string string() const;
         std::tuple<double, double> xy(const double theta) const;
-        void setPositionAndIncidence(const double theta, const double beta);
 
 		EllipseBilliard* clone() const { return new EllipseBilliard(*this); }
 
 	protected:
-        double nextPosition();
-        double nextDirection();
+        void updatePosition();
+        void updateDirection();
 
 		double a, b, e;
-        // Store these values for greater numerical accuracy.
-        double currentX, currentY;  // Current coordinates
-        double normalX, normalY;  // Current coordinates of the normal vector
 };
 
 #endif

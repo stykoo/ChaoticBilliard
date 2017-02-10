@@ -33,8 +33,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "AbstractBilliard.h"
 
 // Construct the abstract billiard.
-AbstractBilliard::AbstractBilliard(const double theta, const double alpha) :
-    currentTheta(theta), currentAlpha(alpha) {
+AbstractBilliard::AbstractBilliard(const double theta, const double alpha) {
+    // We initiatize the radius to 1 because we don't know what it should be!
+    // (Did you want to call a pure virtual function inside the constructor?)
+    currentPosition.setPolarCoordinates(1., theta);
+
+    currentDirection.setPolarCoordinates(1., alpha);
 }
 
 // Return the coordinates given an angle.
@@ -45,35 +49,36 @@ std::tuple<double, double> AbstractBilliard::xy(const double theta) const {
 
 // Return the current angle of position.
 double AbstractBilliard::getTheta() const {
-    return currentTheta;
+    return currentPosition.theta();
 }
 
 // Return the current coordinates.
 std::tuple<double, double> AbstractBilliard::getXY() const {
-    return xy(currentTheta);
+    return std::make_tuple(currentPosition.x(), currentPosition.y());
 }
 
 // Return the current angles of position and incidence.
 std::tuple<double, double> AbstractBilliard::getPhaseCoos() const {
-    return std::make_tuple(currentTheta,
-        direction2incidence(currentAlpha, currentTheta));
+    return std::make_tuple(currentPosition.theta(),
+                           direction2incidence(currentDirection.theta(),
+                                               currentPosition.theta()));
 }
 
 // Set the angles of position and incidence.
 void AbstractBilliard::setPositionAndIncidence(const double theta,
                                                const double beta) {
-    currentTheta = wrapAngle(theta);
-    currentAlpha = incidence2direction(beta, theta);
+    currentPosition.setPolarCoordinates(rho(theta), wrapAngle(theta));
+    currentDirection.setPolarCoordinates(1., incidence2direction(beta, theta));
 }
 
 // Make a move on the billiard: update the angles of position and direction.
 void AbstractBilliard::updatePositionAndDirection() {
-    currentTheta = nextPosition();     
-    if (std::isnan(currentTheta)) {
+    updatePosition();     
+    if (std::isnan(currentPosition.theta())) {
         throw std::runtime_error("Encountered NaN value.");
     }
-    currentAlpha = nextDirection();     
-    if (std::isnan(currentAlpha)) {
+    updateDirection();     
+    if (std::isnan(currentDirection.theta())) {
         throw std::runtime_error("Encountered NaN value.");
     }
 }
@@ -90,24 +95,21 @@ double AbstractBilliard::direction2incidence(const double alpha,
     return wrapAngle(M_PI - alpha + theta);
 }
 
-// Return the next angle of position.
+// Update the position.
 // Solve for the intersection of the shape rho(theta) and a line.
-double AbstractBilliard::nextPosition() {
-    const double currentX = rho(currentTheta) * std::cos(currentTheta);
-    const double currentY = rho(currentTheta) * std::sin(currentTheta);
-
-    // Equation of the line: ux+xy+w=0
-    const double u = -std::sin(currentAlpha);
-    const double v = std::cos(currentAlpha);
-    const double w = - (u*currentX + v*currentY);
+void AbstractBilliard::updatePosition() {
+    // Equation of the line: ux+vy+w=0
+    const double u = -currentDirection.y();
+    const double v = currentDirection.x();
+    const double w = - (u*currentPosition.x() + v*currentPosition.y());
 
     auto fun = [&] (const double &t) {
         return rho(t) * (u * std::cos(t) + v * std::sin(t)) + w;
     };
 
     const double eps = 1e-6;
-    double nextTheta = bisectionSolver(fun, currentTheta + eps,
-                                       currentTheta + 2*M_PI - eps);
-
-    return wrapAngle(nextTheta);
+    double nextTheta = bisectionSolver(fun, currentPosition.theta() + eps,
+                                       currentPosition.theta() + 2*M_PI - eps);
+    nextTheta = wrapAngle(nextTheta);
+    currentPosition.setPolarCoordinates(rho(nextTheta), nextTheta);
 }

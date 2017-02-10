@@ -28,6 +28,7 @@ HEADERS += gui/MainWindow.h \
            model/CircleBilliard.h \
            model/DeformedCircleBilliard.h \
            model/EllipseBilliard.h \
+           model/Vector2d.h \
            model/routines.h
 SOURCES += main.cpp \
            gui/MainWindow.cpp \
@@ -37,4 +38,5 @@ SOURCES += main.cpp \
            model/CircleBilliard.cpp \
            model/DeformedCircleBilliard.cpp \
            model/EllipseBilliard.cpp \
+           model/Vector2d.cpp \
            model/routines.cpp

@@ -18,37 +18,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*
  * ChaoticBilliard
- * CircleBilliard.h
+ * Vector2d.h
  *
  * Author: Alexis Poncet
  * Email: alexis.poncet@ens.fr
  * Version: 1.0
  *
- * Define the class for a circular billiard.
+ * Contain the definition of the class for a 2d vector that is represented
+ * both in cartesian and polar coordinates.
  */
 
-#ifndef CIRCLE_BILLIARD_H
-#define CIRCLE_BILLIARD_H
+#ifndef VECTOR2D_H
+#define VECTOR2D_H
 
-#include "AbstractBilliard.h"
+class Vector2d {
+    public:
+        Vector2d();
+        double x() const;
+        double y() const;
+        double rho() const;
+        double theta() const;
 
-class CircleBilliard : public AbstractBilliard {
-	public:
-		CircleBilliard(const double theta, const double alpha,
-                       const double r = 1.0);
-		~CircleBilliard(){};
+        void setCartesianCoordinates(const double x0, const double y0);
+        void setPolarCoordinates(const double rho0, const double theta0);
+        void setRho(const double rho0);
 
-        double rho(const double theta) const;
-		double rhoMax() const;
-        std::string string() const;
+        void normalize();
 
-		CircleBilliard* clone() const { return new CircleBilliard(*this); }
-
-	protected:
-        void updatePosition();
-        void updateDirection();
-
-		const double r;
+    private:
+        double _x, _y; // Cartesian coordinates
+        double _rho, _theta; // Polar coordinates
 };
 
 #endif

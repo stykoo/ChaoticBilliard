@@ -39,10 +39,7 @@ EllipseBilliard::EllipseBilliard(const double e, const double theta,
         AbstractBilliard(theta, alpha), a(a), e(e) {
     b = a * std::sqrt(1 - e*e);
 
-    currentX = std::cos(theta);
-    currentY = std::sin(theta);
-    normalX = -std::sin(alpha);
-    normalY = std::cos(alpha);
+    currentPosition.setRho(rho(currentPosition.theta()));
 }
 
 // Return the radius according to the polar equation of the ellipse.
@@ -61,33 +58,21 @@ std::string EllipseBilliard::string() const {
     return "Ellipse (e="+std::to_string(e)+")";
 }
 
-// Re-implement the expression of the coordinates for greater numerical
-// accuracy.
+// Re-implement the expression of the coordinates for greater accuracy.
 std::tuple<double, double> EllipseBilliard::xy(const double theta) const {
     return std::make_tuple(a * std::cos(theta), b * std::sin(theta));
 }
 
-// Re-implement this function because of the new variables.
-void EllipseBilliard::setPositionAndIncidence(const double theta,
-                                              const double beta) {
-    currentTheta = wrapAngle(theta);
-    currentAlpha = incidence2direction(beta, theta);
-    currentX = std::cos(currentTheta);
-    currentY = std::sin(currentTheta);
-    normalX = -std::sin(currentAlpha);
-    normalY = std::cos(currentAlpha);
-}
-
-// Return the next angle of position taking into account the current angles
+// Update the angle of position taking into account the current angles
 // of position and direction. This is done by solving a second order equation.
-double EllipseBilliard::nextPosition() {
+void EllipseBilliard::updatePosition() {
     double s1 = 1. / (a*a);
     double s2 = 1. / (b*b);
-    double x0 = currentX, y0 = currentY;
+    double x0 = currentPosition.x(), y0 = currentPosition.y();
 
     // ux + vy + w = 0
-    double u = normalX;
-    double v = normalY;
+    double u = -currentDirection.y();
+    double v = currentDirection.x();
     double w = - (u*x0 + v*y0);
 
     // If v is small, we swap the roles of x and y to avoid division by zero
@@ -123,23 +108,19 @@ double EllipseBilliard::nextPosition() {
         std::swap(xNext, yNext);
     }
 
-    currentX = xNext;
-    currentY = yNext;
-
-    double thetaNext = std::atan2(yNext, xNext);
-    return thetaNext;
+    currentPosition.setCartesianCoordinates(xNext, yNext);
 }
 
-// Return the next angle of direction taking into account the current angles
+// Update the angle of direction taking into account the current angles
 // of position and direction.
 // This is done by a decomposition in the right basis.
-double EllipseBilliard::nextDirection() {
-    double ux = normalY;
-    double uy = -normalX;
+void EllipseBilliard::updateDirection() {
+    double ux = currentDirection.x();
+    double uy = currentDirection.y();
 
     // Normal vector to the ellipse
-    double nx = -a * currentY / b;
-    double ny = b * currentX / a;
+    double nx = -a * currentPosition.y() / b;
+    double ny = b * currentPosition.x() / a;
     double nNorm = nx*nx + ny*ny;
     nx /= nNorm;
     ny /= nNorm;
@@ -148,7 +129,6 @@ double EllipseBilliard::nextDirection() {
 
     double dx = (ux*nx + uy*ny)*nx - (ux*tx + uy*ty)*tx;
     double dy = (ux*nx + uy*ny)*ny - (ux*tx + uy*ty)*ty;
-    normalX = -dy;
-    normalY = dx;
-    return std::atan2(dy, dx);
+    currentDirection.setCartesianCoordinates(dx, dy);
+    currentDirection.normalize();
 }

@@ -34,7 +34,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Construct circular billiard.
 CircleBilliard::CircleBilliard(const double theta, const double alpha,
                                const double r) :
-    AbstractBilliard(theta, alpha), r(r) {
+        AbstractBilliard(theta, alpha), r(r) {
+    currentPosition.setRho(r);
 }
 
 // Return constant radius.
@@ -55,12 +56,16 @@ std::string CircleBilliard::string() const {
 
 // Return the next angle of position taking into account the current angles
 // of position and direction.
-double CircleBilliard::nextPosition() {
-    return wrapAngle(-currentTheta + 2 * currentAlpha - M_PI);
+void CircleBilliard::updatePosition() {
+    double nextTheta =  wrapAngle(-currentPosition.theta()
+                                  + 2 * currentDirection.theta() - M_PI);
+    currentPosition.setPolarCoordinates(rho(nextTheta), nextTheta);
 }
 
 // Return the next angle of direction taking into account the current angles
 // of position and direction.
-double CircleBilliard::nextDirection() {
-    return wrapAngle(2 * currentTheta - currentAlpha);
+void CircleBilliard::updateDirection() {
+    double nextAlpha = wrapAngle(2 * currentPosition.theta()
+                                 - currentDirection.theta());
+    currentDirection.setPolarCoordinates(1., nextAlpha);
 }
